@@ -29,4 +29,9 @@ public class ClienteService {
 	public void save(Cliente cliente) {
 		clienteRepository.save(cliente);
 	}
+
+	public void deletePorId(Long clienteId) {
+		clienteRepository.deleteById(clienteId);
+		
+	}
 }
