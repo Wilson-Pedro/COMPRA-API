@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wamkti.wamk.dtos.ClienteDTO;
 import com.wamkti.wamk.dtos.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.repositories.ClienteRepository;
@@ -18,5 +19,10 @@ public class ClienteService {
 	public List<ClienteMinDTO> findAll() {
 		List<Cliente> list = clienteRepository.findAll();
 		return list.stream().map(x -> new ClienteMinDTO(x)).toList();
+	}
+
+	public ClienteDTO findById(Long clienteId) {
+		Cliente cliente = clienteRepository.findById(clienteId).get();
+		return new ClienteDTO(cliente);
 	}
 }

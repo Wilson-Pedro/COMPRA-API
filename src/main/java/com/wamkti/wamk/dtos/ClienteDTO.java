@@ -2,6 +2,8 @@ package com.wamkti.wamk.dtos;
 
 import java.io.Serializable;
 
+import com.wamkti.wamk.entities.Cliente;
+
 public class ClienteDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -12,10 +14,10 @@ public class ClienteDTO implements Serializable{
 	public ClienteDTO() {
 	}
 
-	public ClienteDTO(Long id, String nome, Double dinheiro) {
-		this.id = id;
-		this.nome = nome;
-		this.dinheiro = dinheiro;
+	public ClienteDTO(Cliente cliente) {
+		id = cliente.getId();
+		nome = cliente.getNome();
+		dinheiro = cliente.getDinheiro();
 	}
 
 	public Long getId() {
