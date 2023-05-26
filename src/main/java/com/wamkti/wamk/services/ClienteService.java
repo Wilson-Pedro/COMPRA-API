@@ -25,4 +25,8 @@ public class ClienteService {
 		Cliente cliente = clienteRepository.findById(clienteId).get();
 		return new ClienteDTO(cliente);
 	}
+
+	public void save(Cliente cliente) {
+		clienteRepository.save(cliente);
+	}
 }
