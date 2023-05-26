@@ -47,4 +47,14 @@ public class ClienteController {
 		clienteDTO.setId(cliente.getId());
 		return clienteDTO;
 	}
+	
+	@PutMapping(value = "/{clienteId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void atualizarCliente(@RequestBody ClienteDTO clienteDTO, 
+			@PathVariable Long clienteId) {
+		var cliente = new Cliente();
+		BeanUtils.copyProperties(clienteDTO, cliente);
+		cliente.setId(clienteId);
+		clienteService.save(cliente);
+	}
 }
