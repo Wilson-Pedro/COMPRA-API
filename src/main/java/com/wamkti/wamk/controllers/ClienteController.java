@@ -2,7 +2,6 @@ package com.wamkti.wamk.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +27,7 @@ public class ClienteController {
 	private ClienteService clienteService;
 
 	@GetMapping
-	public List<ClienteMinDTO> ola() {
+	public List<ClienteMinDTO> listar() {
 		List<ClienteMinDTO> list = clienteService.findAll();
 		return list;
 	}
@@ -42,21 +41,15 @@ public class ClienteController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ClienteDTO adcionarCliente(@RequestBody ClienteDTO clienteDTO) {
-		var cliente = new Cliente();
-		BeanUtils.copyProperties(clienteDTO, cliente);
-		clienteService.save(cliente);
-		clienteDTO.setId(cliente.getId());
-		return clienteDTO;
+		Cliente cliente = clienteService.copiarESalvar(clienteDTO);
+		return new ClienteDTO(cliente);
 	}
 	
 	@PutMapping(value = "/{clienteId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void atualizarCliente(@RequestBody ClienteDTO clienteDTO, 
 			@PathVariable Long clienteId) {
-		var cliente = new Cliente();
-		BeanUtils.copyProperties(clienteDTO, cliente);
-		cliente.setId(clienteId);
-		clienteService.save(cliente);
+		clienteService.atualizar(clienteDTO, clienteId);
 	}
 	
 	@DeleteMapping(value = "/{clienteId}")

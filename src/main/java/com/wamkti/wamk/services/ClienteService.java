@@ -2,8 +2,10 @@ package com.wamkti.wamk.services;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wamkti.wamk.dtos.ClienteDTO;
 import com.wamkti.wamk.dtos.ClienteMinDTO;
@@ -33,5 +35,21 @@ public class ClienteService {
 	public void deletePorId(Long clienteId) {
 		clienteRepository.deleteById(clienteId);
 		
+	}
+
+	@Transactional
+	public Cliente copiarESalvar(ClienteDTO clienteDTO) {
+		var cliente = new Cliente();
+		BeanUtils.copyProperties(clienteDTO, cliente);
+		clienteRepository.save(cliente);
+		return cliente;
+	}
+
+	@Transactional
+	public void atualizar(ClienteDTO clienteDTO, Long clienteId) {
+		var cliente = new Cliente();
+		BeanUtils.copyProperties(clienteDTO, cliente);
+		cliente.setId(clienteId);
+		clienteRepository.save(cliente);
 	}
 }
