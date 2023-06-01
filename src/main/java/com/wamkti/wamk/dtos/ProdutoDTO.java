@@ -2,7 +2,11 @@ package com.wamkti.wamk.dtos;
 
 import java.io.Serializable;
 
+import org.springframework.beans.BeanUtils;
+
+import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.entities.Produto;
+
 
 public class ProdutoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -11,15 +15,21 @@ public class ProdutoDTO implements Serializable{
 	private String nomeProduto;
 	private Integer quantidade;
 	private Double preco;
+	private Cliente cliente;
 	
 	public ProdutoDTO() {
 	}
 
 	public ProdutoDTO(Produto produto) {
-		id = produto.getId();
-		nomeProduto = produto.getNomeProduto();
-		quantidade = produto.getQuantidade();
-		preco = produto.getPreco();
+		BeanUtils.copyProperties(produto, this);
+	}
+
+	public ProdutoDTO(Long id, String nomeProduto, Integer quantidade, Double preco, Cliente cliente) {
+		this.id = id;
+		this.nomeProduto = nomeProduto;
+		this.quantidade = quantidade;
+		this.preco = preco;
+		this.cliente = cliente;
 	}
 
 	public Long getId() {
@@ -52,5 +62,13 @@ public class ProdutoDTO implements Serializable{
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 }

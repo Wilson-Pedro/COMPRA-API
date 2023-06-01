@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wamkti.wamk.dtos.ProdutoDTO;
-import com.wamkti.wamk.dtos.ProdutoMinDTO;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 
@@ -18,14 +17,13 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
-	public List<ProdutoMinDTO> findAll() {
-		List<Produto> list = produtoRepository.findAll();
-		return list.stream().map(x -> new ProdutoMinDTO(x)).toList();
+	public List<Produto> findAll() {
+		return produtoRepository.findAll();
+		//return list.stream().map(x -> new ProdutoMinDTO(x)).toList();
 	}
 
-	public ProdutoDTO findById(Long produtoId) {
-		Produto produto = produtoRepository.findById(produtoId).get();
-		return new ProdutoDTO(produto);
+	public Produto findById(Long produtoId) {
+		return produtoRepository.findById(produtoId).get();
 	}
 	
 	@Transactional

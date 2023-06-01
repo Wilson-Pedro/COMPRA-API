@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wamkti.wamk.assembler.ProdutoAssembler;
 import com.wamkti.wamk.dtos.ProdutoDTO;
 import com.wamkti.wamk.dtos.ProdutoMinDTO;
 import com.wamkti.wamk.entities.Produto;
@@ -26,23 +27,28 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService produtoService;
 
+	
+	@Autowired
+	private ProdutoAssembler produtoAssembler;
+
 	@GetMapping
 	public List<ProdutoMinDTO> listar(){
-		List<ProdutoMinDTO> list = produtoService.findAll();
-		return list;
+		return produtoAssembler.toCollectionMinDTO(produtoService.findAll());
 	}
 	
 	@GetMapping(value = "/{produtoId}")
 	public ProdutoDTO buscar(@PathVariable Long produtoId) {
-		ProdutoDTO produtoDTO = produtoService.findById(produtoId);
-		return produtoDTO;
+		Produto produto = produtoService.findById(produtoId);
+		return new ProdutoDTO(produto);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoDTO adcionarProduto(@RequestBody ProdutoDTO produtoDTO) {
-		Produto produto = produtoService.copiarESalvar(produtoDTO);
-		return new ProdutoDTO(produto);
+		Produto obj = produtoAssembler.toEntity(produtoDTO);
+		Produto produto = produtoService.save(obj);
+		
+		return produtoAssembler.toDTO(produto);
 	}
 	
 	@PutMapping(value = "/{produtoId}")

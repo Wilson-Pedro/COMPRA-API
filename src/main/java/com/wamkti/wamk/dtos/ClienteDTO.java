@@ -1,6 +1,10 @@
 package com.wamkti.wamk.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
 
 import com.wamkti.wamk.entities.Cliente;
 
@@ -10,14 +14,19 @@ public class ClienteDTO implements Serializable{
 	private Long id;
 	private String nome;
 	private Double dinheiro;
+	private List<ProdutoDTO> produtos = new ArrayList<>();
 	
 	public ClienteDTO() {
 	}
 
 	public ClienteDTO(Cliente cliente) {
-		id = cliente.getId();
-		nome = cliente.getNome();
-		dinheiro = cliente.getDinheiro();
+		BeanUtils.copyProperties(cliente, this);
+	}
+	
+	public ClienteDTO(Long id, String nome, Double dinheiro) {
+		this.id = id;
+		this.nome = nome;
+		this.dinheiro = dinheiro;
 	}
 
 	public Long getId() {
@@ -42,5 +51,13 @@ public class ClienteDTO implements Serializable{
 
 	public void setDinheiro(Double dinheiro) {
 		this.dinheiro = dinheiro;
+	}
+
+	public List<ProdutoDTO> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<ProdutoDTO> produtos) {
+		this.produtos = produtos;
 	}
 }
