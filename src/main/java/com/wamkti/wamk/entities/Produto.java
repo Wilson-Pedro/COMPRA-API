@@ -3,14 +3,10 @@ package com.wamkti.wamk.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,20 +20,19 @@ public class Produto implements Serializable{
 	private String nomeProduto;
 	private Integer quantidade;
 	private Double preco;
-	
-	@ManyToOne(fetch = FetchType.EAGER,  cascade=CascadeType.ALL)
-	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
+	private Integer clienteId;
+
 	
 	public Produto() {
 	}
 
-	public Produto(Long id, String nomeProduto, Integer quantidade, Double preco, Cliente cliente) {
+	public Produto(Long id, String nomeProduto, Integer quantidade, Double preco, Integer clienteId) {
+		super();
 		this.id = id;
 		this.nomeProduto = nomeProduto;
 		this.quantidade = quantidade;
 		this.preco = preco;
-		this.cliente = cliente;
+		this.clienteId = clienteId;
 	}
 
 	public Long getId() {
@@ -72,12 +67,12 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Integer getClienteId() {
+		return clienteId;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setClienteId(Integer clienteId) {
+		this.clienteId = clienteId;
 	}
 
 	@Override

@@ -27,9 +27,9 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService produtoService;
 
-	
 	@Autowired
 	private ProdutoAssembler produtoAssembler;
+	
 
 	@GetMapping
 	public List<ProdutoMinDTO> listar(){
@@ -46,9 +46,8 @@ public class ProdutoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoDTO adcionarProduto(@RequestBody ProdutoDTO produtoDTO) {
 		Produto obj = produtoAssembler.toEntity(produtoDTO);
-		Produto produto = produtoService.save(obj);
-		
-		return produtoAssembler.toDTO(produto);
+		produtoService.save(obj);
+		return produtoAssembler.toDTO(obj);
 	}
 	
 	@PutMapping(value = "/{produtoId}")

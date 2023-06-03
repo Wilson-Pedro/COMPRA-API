@@ -2,16 +2,11 @@ package com.wamkti.wamk.dtos;
 
 import com.wamkti.wamk.entities.Produto;
 
-import jakarta.persistence.Embedded;
-
 public class ProdutoMinDTO {
 
 	private Long id;
 	private String nomeProduto;
 	private Double preco;
-	
-	@Embedded
-	private ClienteMinDTO clienteMinDTO;
 	
 	public ProdutoMinDTO() {
 	}
@@ -22,11 +17,11 @@ public class ProdutoMinDTO {
 		preco = produto.getPreco();
 	}
 
-	public ProdutoMinDTO(Long id, String nomeProduto, Double preco, ClienteMinDTO clienteMinDTO) {
+	public ProdutoMinDTO(Long id, String nomeProduto, Double preco) {
+		super();
 		this.id = id;
 		this.nomeProduto = nomeProduto;
 		this.preco = preco;
-		this.clienteMinDTO = clienteMinDTO;
 	}
 
 	public Long getId() {
@@ -51,13 +46,5 @@ public class ProdutoMinDTO {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
-	}
-
-	public ClienteMinDTO getClienteMinDTO() {
-		return clienteMinDTO;
-	}
-
-	public void setClienteMinDTO(ClienteMinDTO cliente) {
-		this.clienteMinDTO = cliente;
 	}
 }

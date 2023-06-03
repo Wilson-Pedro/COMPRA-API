@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.springframework.beans.BeanUtils;
 
-import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.entities.Produto;
 
 
@@ -15,7 +14,7 @@ public class ProdutoDTO implements Serializable{
 	private String nomeProduto;
 	private Integer quantidade;
 	private Double preco;
-	private Cliente cliente;
+	private Integer ClienteId;
 	
 	public ProdutoDTO() {
 	}
@@ -24,12 +23,13 @@ public class ProdutoDTO implements Serializable{
 		BeanUtils.copyProperties(produto, this);
 	}
 
-	public ProdutoDTO(Long id, String nomeProduto, Integer quantidade, Double preco, Cliente cliente) {
+	public ProdutoDTO(Long id, String nomeProduto, Integer quantidade, Double preco, Integer clienteId) {
+		super();
 		this.id = id;
 		this.nomeProduto = nomeProduto;
 		this.quantidade = quantidade;
 		this.preco = preco;
-		this.cliente = cliente;
+		ClienteId = clienteId;
 	}
 
 	public Long getId() {
@@ -64,11 +64,11 @@ public class ProdutoDTO implements Serializable{
 		this.preco = preco;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Integer getClienteId() {
+		return ClienteId;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setClienteId(Integer clienteId) {
+		ClienteId = clienteId;
 	}
 }

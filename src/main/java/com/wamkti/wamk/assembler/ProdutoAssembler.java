@@ -7,7 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wamkti.wamk.dtos.ClienteMinDTO;
 import com.wamkti.wamk.dtos.ProdutoDTO;
 import com.wamkti.wamk.dtos.ProdutoMinDTO;
 import com.wamkti.wamk.entities.Produto;
@@ -24,9 +23,6 @@ public class ProdutoAssembler {
 	
 	public ProdutoMinDTO toMinDTO(Produto produto) {
 		var produtoMinDTO = new ProdutoMinDTO(produto);
-		if(produto.getCliente() != null) {
-			produtoMinDTO.setClienteMinDTO(new ClienteMinDTO(produto.getCliente()));
-		}
 		return modelMapper.map(produtoMinDTO, ProdutoMinDTO.class);
 	}
 	

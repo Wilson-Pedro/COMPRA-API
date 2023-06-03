@@ -1,19 +1,13 @@
 package com.wamkti.wamk.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,9 +21,8 @@ public class Cliente implements Serializable{
 	private String nome;
 	private Double dinheiro;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Produto> produto = new ArrayList<>();
+	@OneToOne(mappedBy = "cliente")
+	private Compra compra;
 	
 	public Cliente() {
 	}
@@ -62,10 +55,6 @@ public class Cliente implements Serializable{
 
 	public void setDinheiro(Double dinheiro) {
 		this.dinheiro = dinheiro;
-	}
-
-	public List<Produto> getProduto() {
-		return produto;
 	}
 
 	@Override
