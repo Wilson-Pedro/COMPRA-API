@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,8 @@ import com.wamkti.wamk.dtos.CompraDTO;
 import com.wamkti.wamk.dtos.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.entities.StatusCompra;
+import com.wamkti.wamk.repositories.ClienteRepository;
+import com.wamkti.wamk.repositories.ProdutoRepository;
 import com.wamkti.wamk.services.CompraService;
 
 @RestController
@@ -30,6 +33,12 @@ public class CompraController {
 
 	@Autowired
 	private CompraAssembler compraAssembler;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ProdutoRepository produtoRepository;
 	
 
 	@GetMapping
@@ -63,5 +72,17 @@ public class CompraController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletarCompra(@PathVariable Long compraId) {
 		compraService.deletePorId(compraId);
+	}
+	
+	@PutMapping("/{clienteId}/compra/{produtoId}")
+	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
+			@PathVariable Long produtoId) {
+		var cliente = clienteRepository.findById(clienteId);
+		var produto = produtoRepository.findById(produtoId);
+		double valorAPAGAR = produto.get().getSubTotal();
+		cliente.get().setDinheiro(cliente.get().getDinheiro() - valorAPAGAR);
+		clienteRepository.save(cliente.get());
+		
+		return ResponseEntity.ok("Compra realizado com suceesso");
 	}
 }

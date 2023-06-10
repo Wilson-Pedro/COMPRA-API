@@ -14,7 +14,7 @@ public class ProdutoDTO implements Serializable{
 	private String nomeProduto;
 	private Integer quantidade;
 	private Double preco;
-	private Integer ClienteId;
+	private Long idCliente;
 	
 	public ProdutoDTO() {
 	}
@@ -23,13 +23,12 @@ public class ProdutoDTO implements Serializable{
 		BeanUtils.copyProperties(produto, this);
 	}
 
-	public ProdutoDTO(Long id, String nomeProduto, Integer quantidade, Double preco, Integer clienteId) {
-		super();
+	public ProdutoDTO(Long id, String nomeProduto, Integer quantidade, Double preco, Long idCliente) {
 		this.id = id;
 		this.nomeProduto = nomeProduto;
 		this.quantidade = quantidade;
 		this.preco = preco;
-		ClienteId = clienteId;
+		this.idCliente = idCliente;
 	}
 
 	public Long getId() {
@@ -64,11 +63,11 @@ public class ProdutoDTO implements Serializable{
 		this.preco = preco;
 	}
 
-	public Integer getClienteId() {
-		return ClienteId;
+	public Long getIdCliente() {
+		return idCliente;
 	}
 
-	public void setClienteId(Integer clienteId) {
-		ClienteId = clienteId;
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 }

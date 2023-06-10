@@ -28,6 +28,7 @@ public class ProdutoService {
 	
 	@Transactional
 	public Produto save(Produto produto) {
+		produto.setSubtotal();
 		return produtoRepository.save(produto);
 	}
 

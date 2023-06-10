@@ -14,7 +14,6 @@ public class ClienteDTO implements Serializable{
 	private Long id;
 	private String nome;
 	private Double dinheiro;
-	private List<ProdutoDTO> produtos = new ArrayList<>();
 	
 	public ClienteDTO() {
 	}
@@ -51,13 +50,5 @@ public class ClienteDTO implements Serializable{
 
 	public void setDinheiro(Double dinheiro) {
 		this.dinheiro = dinheiro;
-	}
-
-	public List<ProdutoDTO> getProdutos() {
-		return produtos;
-	}
-
-	public void setProdutos(List<ProdutoDTO> produtos) {
-		this.produtos = produtos;
 	}
 }

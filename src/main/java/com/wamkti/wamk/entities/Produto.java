@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,19 +22,27 @@ public class Produto implements Serializable{
 	private String nomeProduto;
 	private Integer quantidade;
 	private Double preco;
-	private Integer clienteId;
-
+	private Double subTotal;
+	
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+	
+	private Long idCliente;
 	
 	public Produto() {
 	}
-
-	public Produto(Long id, String nomeProduto, Integer quantidade, Double preco, Integer clienteId) {
+	
+	public Produto(Long id, String nomeProduto, Integer quantidade, Double preco, Double subTotal, Cliente cliente,
+			Long idCliente) {
 		super();
 		this.id = id;
 		this.nomeProduto = nomeProduto;
 		this.quantidade = quantidade;
 		this.preco = preco;
-		this.clienteId = clienteId;
+		this.subTotal = subTotal;
+		this.cliente = cliente;
+		this.idCliente = idCliente;
 	}
 
 	public Long getId() {
@@ -67,12 +77,29 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
-	public Integer getClienteId() {
-		return clienteId;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setClienteId(Integer clienteId) {
-		this.clienteId = clienteId;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Long getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+	
+	public Double getSubTotal() {
+		double quantity = (double) quantidade;
+		return preco * quantity;
+	}
+	
+	public void setSubtotal() {
+		subTotal =  getSubTotal();
 	}
 
 	@Override
