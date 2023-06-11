@@ -49,7 +49,7 @@ public class ClienteController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void atualizarCliente(@RequestBody ClienteDTO clienteDTO, 
 			@PathVariable Long clienteId) {
-		clienteService.atualizar(clienteDTO, clienteId);
+		clienteService.atualizarComDTO(clienteDTO, clienteId);
 	}
 	
 	@DeleteMapping(value = "/{clienteId}")

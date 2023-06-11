@@ -46,10 +46,15 @@ public class ClienteService {
 	}
 
 	@Transactional
-	public void atualizar(ClienteDTO clienteDTO, Long clienteId) {
+	public void atualizarComDTO(ClienteDTO clienteDTO, Long clienteId) {
 		var cliente = new Cliente();
 		BeanUtils.copyProperties(clienteDTO, cliente);
 		cliente.setId(clienteId);
+		clienteRepository.save(cliente);
+	}
+
+	public void atualizarDinheiro(Cliente cliente, double subtotal) {
+		cliente.setDinheiro(cliente.getDinheiro() - subtotal);
 		clienteRepository.save(cliente);
 	}
 }

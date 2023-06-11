@@ -23,6 +23,7 @@ import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.entities.StatusCompra;
 import com.wamkti.wamk.repositories.ClienteRepository;
 import com.wamkti.wamk.repositories.ProdutoRepository;
+import com.wamkti.wamk.services.ClienteService;
 import com.wamkti.wamk.services.CompraService;
 
 @RestController
@@ -34,6 +35,9 @@ public class CompraController {
 
 	@Autowired
 	private CompraAssembler compraAssembler;
+	
+	@Autowired
+	private ClienteService clienteService;
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
@@ -87,12 +91,9 @@ public class CompraController {
 		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
 		}
-		
-		compra.setItems(compra.getItems() + items);
-		compra.setTotal(compra.getTotal() + subtotal);
-		cliente.get().setDinheiro(cliente.get().getDinheiro() - subtotal);
-		compraService.atualziar(compra);
-		clienteRepository.save(cliente.get());
+	
+		compraService.atualziar(compra, items, subtotal);
+		clienteService.atualizarDinheiro(cliente.get(), subtotal);
 		
 		return ResponseEntity.ok("Compra realizado com suceesso");
 	}

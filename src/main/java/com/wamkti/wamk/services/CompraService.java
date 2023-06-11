@@ -16,6 +16,8 @@ public class CompraService {
 
 	@Autowired
 	private CompraRepository compraRepository;
+	
+	
 
 	public List<Compra> findAll() {
 		return compraRepository.findAll();
@@ -31,7 +33,9 @@ public class CompraService {
 		compraRepository.save(compra);
 	}
 	
-	public void atualziar(Compra compra) {
+	public void atualziar(Compra compra, int items, double subtotal) {
+		compra.setItems(compra.getItems() + items);
+		compra.setTotal(compra.getTotal() + subtotal);
 		compraRepository.save(compra);
 	}
 
