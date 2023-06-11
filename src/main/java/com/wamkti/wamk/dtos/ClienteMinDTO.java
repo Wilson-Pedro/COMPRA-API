@@ -17,7 +17,7 @@ public class ClienteMinDTO implements Serializable{
 	private String nome;
 	
 	@JsonIgnore
-	private List<ProdutoMinDTO> produtos = new ArrayList<>();
+	private List<ProdutoDTO> produtos = new ArrayList<>();
 	
 	public ClienteMinDTO() {
 	}
@@ -43,7 +43,7 @@ public class ClienteMinDTO implements Serializable{
 		this.nome = nome;
 	}
 
-	public List<ProdutoMinDTO> getProdutos() {
+	public List<ProdutoDTO> getProdutos() {
 		return produtos;
 	}
 }

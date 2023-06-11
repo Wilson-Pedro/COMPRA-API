@@ -20,29 +20,20 @@ public class Produto implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nomeProduto;
-	private Integer quantidade;
 	private Double preco;
-	private Double subTotal;
 	
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
-	private Long idCliente;
-	
 	public Produto() {
 	}
 	
-	public Produto(Long id, String nomeProduto, Integer quantidade, Double preco, Double subTotal, Cliente cliente,
-			Long idCliente) {
-		super();
+	public Produto(Long id, String nomeProduto, Double preco, Cliente cliente) {
 		this.id = id;
 		this.nomeProduto = nomeProduto;
-		this.quantidade = quantidade;
 		this.preco = preco;
-		this.subTotal = subTotal;
 		this.cliente = cliente;
-		this.idCliente = idCliente;
 	}
 
 	public Long getId() {
@@ -61,14 +52,6 @@ public class Produto implements Serializable{
 		this.nomeProduto = nomeProduto;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public Double getPreco() {
 		return preco;
 	}
@@ -83,23 +66,6 @@ public class Produto implements Serializable{
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
-	}
-
-	public Long getIdCliente() {
-		return idCliente;
-	}
-
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
-	}
-	
-	public Double getSubTotal() {
-		double quantity = (double) quantidade;
-		return preco * quantity;
-	}
-	
-	public void setSubtotal() {
-		subTotal =  getSubTotal();
 	}
 
 	@Override

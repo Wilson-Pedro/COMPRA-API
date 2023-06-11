@@ -6,15 +6,12 @@ import org.springframework.beans.BeanUtils;
 
 import com.wamkti.wamk.entities.Produto;
 
-
 public class ProdutoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
 	private String nomeProduto;
-	private Integer quantidade;
 	private Double preco;
-	private Long idCliente;
 	
 	public ProdutoDTO() {
 	}
@@ -23,12 +20,10 @@ public class ProdutoDTO implements Serializable{
 		BeanUtils.copyProperties(produto, this);
 	}
 
-	public ProdutoDTO(Long id, String nomeProduto, Integer quantidade, Double preco, Long idCliente) {
+	public ProdutoDTO(Long id, String nomeProduto, Double preco, Long idCliente) {
 		this.id = id;
 		this.nomeProduto = nomeProduto;
-		this.quantidade = quantidade;
 		this.preco = preco;
-		this.idCliente = idCliente;
 	}
 
 	public Long getId() {
@@ -47,27 +42,11 @@ public class ProdutoDTO implements Serializable{
 		this.nomeProduto = nomeProduto;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public Double getPreco() {
 		return preco;
 	}
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
-	}
-
-	public Long getIdCliente() {
-		return idCliente;
-	}
-
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
 	}
 }

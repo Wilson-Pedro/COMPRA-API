@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wamkti.wamk.assembler.ProdutoAssembler;
 import com.wamkti.wamk.dtos.ProdutoDTO;
-import com.wamkti.wamk.dtos.ProdutoMinDTO;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.services.ProdutoService;
 
@@ -32,8 +31,8 @@ public class ProdutoController {
 	
 
 	@GetMapping
-	public List<ProdutoMinDTO> listar(){
-		return produtoAssembler.toCollectionMinDTO(produtoService.findAll());
+	public List<ProdutoDTO> listar(){
+		return produtoAssembler.toCollectionDTO(produtoService.findAll());
 	}
 	
 	@GetMapping(value = "/{produtoId}")

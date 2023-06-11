@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wamkti.wamk.acoes.Compre;
 import com.wamkti.wamk.assembler.CompraAssembler;
 import com.wamkti.wamk.dtos.CompraDTO;
 import com.wamkti.wamk.dtos.CompraMinDTO;
@@ -56,7 +57,7 @@ public class CompraController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public CompraDTO adcionarCompra(@RequestBody CompraDTO compraDTO) {
 		Compra obj = compraAssembler.toEntity(compraDTO);
-		obj.setStatus(StatusCompra.PENDENTE);
+		obj.setStatus(StatusCompra.COMPRANDO);
 		compraService.save(obj);
 		return compraAssembler.toDTO(obj);
 	}
@@ -65,7 +66,7 @@ public class CompraController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void atualizarCompra(@RequestBody CompraDTO compraDTO, 
 			@PathVariable Long compraId) {
-		compraService.atualizar(compraDTO, compraId);
+		compraService.atualizarComDTO(compraDTO, compraId);
 	}
 	
 	@DeleteMapping(value = "/{compraId}")
@@ -74,13 +75,23 @@ public class CompraController {
 		compraService.deletePorId(compraId);
 	}
 	
-	@PutMapping("/{clienteId}/compra/{produtoId}")
+	@PutMapping("/{clienteId}/compra")
 	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
-			@PathVariable Long produtoId) {
+			@RequestBody Compre compre) {
 		var cliente = clienteRepository.findById(clienteId);
-		var produto = produtoRepository.findById(produtoId);
-		double valorAPAGAR = produto.get().getSubTotal();
-		cliente.get().setDinheiro(cliente.get().getDinheiro() - valorAPAGAR);
+		var produto = produtoRepository.findById(compre.getProdutoId());
+		var compra = compraService.findById(clienteId);
+		int items = compre.getQuantidade();
+		double subtotal = produto.get().getPreco() * items;
+		double dinheiroClinte = cliente.get().getDinheiro();
+		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
+		}
+		
+		compra.setItems(compra.getItems() + items);
+		compra.setTotal(compra.getTotal() + subtotal);
+		cliente.get().setDinheiro(cliente.get().getDinheiro() - subtotal);
+		compraService.atualziar(compra);
 		clienteRepository.save(cliente.get());
 		
 		return ResponseEntity.ok("Compra realizado com suceesso");

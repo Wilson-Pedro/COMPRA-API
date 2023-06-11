@@ -27,6 +27,11 @@ public class CompraService {
 	}
 
 	public void save(Compra compra) {
+		compra.setTotal(0.0);
+		compraRepository.save(compra);
+	}
+	
+	public void atualziar(Compra compra) {
 		compraRepository.save(compra);
 	}
 
@@ -44,7 +49,7 @@ public class CompraService {
 	}
 
 	@Transactional
-	public void atualizar(CompraDTO compraDTO, Long compraId) {
+	public void atualizarComDTO(CompraDTO compraDTO, Long compraId) {
 		var compra = new Compra();
 		BeanUtils.copyProperties(compraDTO, compra);
 		compra.setId(compraId);

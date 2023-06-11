@@ -34,7 +34,6 @@ public class Compra {
 
 	public Compra(Long id, Cliente cliente, Integer clienteId, Integer items, Double total, StatusCompra status,
 			OffsetDateTime dataCompra) {
-		super();
 		this.id = id;
 		this.cliente = cliente;
 		this.clienteId = clienteId;
