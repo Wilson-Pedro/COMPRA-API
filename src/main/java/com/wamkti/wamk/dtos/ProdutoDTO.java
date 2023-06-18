@@ -3,14 +3,21 @@ package com.wamkti.wamk.dtos;
 import java.io.Serializable;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.wamkti.wamk.entities.Produto;
 
-public class ProdutoDTO implements Serializable{
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public class ProdutoDTO extends RepresentationModel<ProdutoDTO> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	
+	@NotBlank
 	private String nomeProduto;
+	@NotNull
 	private Double preco;
 	
 	public ProdutoDTO() {

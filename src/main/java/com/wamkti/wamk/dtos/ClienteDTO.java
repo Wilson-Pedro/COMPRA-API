@@ -1,18 +1,24 @@
 package com.wamkti.wamk.dtos;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.wamkti.wamk.entities.Cliente;
 
-public class ClienteDTO implements Serializable{
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	
+	@NotBlank
 	private String nome;
+	
+	@NotNull
 	private Double dinheiro;
 	
 	public ClienteDTO() {

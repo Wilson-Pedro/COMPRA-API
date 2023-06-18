@@ -1,9 +1,14 @@
 package com.wamkti.wamk.dtos;
 
+import java.io.Serializable;
+
+import org.springframework.hateoas.RepresentationModel;
+
 import com.wamkti.wamk.entities.Compra;
 
-public class CompraMinDTO {
-
+public class CompraMinDTO extends RepresentationModel<CompraMinDTO> implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String nomeCliente;
 	private Integer items;

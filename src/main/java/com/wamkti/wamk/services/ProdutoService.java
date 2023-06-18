@@ -17,13 +17,19 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
-	public List<Produto> findAll() {
-		return produtoRepository.findAll();
+	public List<ProdutoDTO> findAll() {
 		//return list.stream().map(x -> new ProdutoMinDTO(x)).toList();
+		List<Produto> list = produtoRepository.findAll();
+		return list.stream().map(x -> new ProdutoDTO(x)).toList();
 	}
 
 	public Produto findById(Long produtoId) {
 		return produtoRepository.findById(produtoId).get();
+	}
+	
+	public ProdutoDTO findByIdDTO(Long produtoId) {
+		Produto prouduto = produtoRepository.findById(produtoId).get();
+		return new ProdutoDTO(prouduto);
 	}
 	
 	@Transactional

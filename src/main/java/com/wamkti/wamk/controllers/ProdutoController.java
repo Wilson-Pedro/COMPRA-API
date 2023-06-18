@@ -1,5 +1,8 @@
 package com.wamkti.wamk.controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import com.wamkti.wamk.dtos.ProdutoDTO;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.services.ProdutoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
@@ -32,18 +37,26 @@ public class ProdutoController {
 
 	@GetMapping
 	public List<ProdutoDTO> listar(){
-		return produtoAssembler.toCollectionDTO(produtoService.findAll());
+		List<ProdutoDTO> list = produtoService.findAll();
+		if(!list.isEmpty()) {
+			for(ProdutoDTO produtoDTO : list) {
+				Long id = produtoDTO.getId();
+				produtoDTO.add(linkTo(methodOn(ProdutoController.class).buscar(id)).withSelfRel());
+			}
+		}
+		return list;
 	}
 	
 	@GetMapping(value = "/{produtoId}")
 	public ProdutoDTO buscar(@PathVariable Long produtoId) {
-		Produto produto = produtoService.findById(produtoId);
-		return new ProdutoDTO(produto);
+		ProdutoDTO produtoDTO = produtoService.findByIdDTO(produtoId);
+		produtoDTO.add(linkTo(methodOn(ProdutoController.class).listar()).withSelfRel());
+		return produtoDTO;
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoDTO adcionarProduto(@RequestBody ProdutoDTO produtoDTO) {
+	public ProdutoDTO adcionarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
 		Produto obj = produtoAssembler.toEntity(produtoDTO);
 		produtoService.save(obj);
 		return produtoAssembler.toDTO(obj);
@@ -51,7 +64,7 @@ public class ProdutoController {
 	
 	@PutMapping(value = "/{produtoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizarProduto(@RequestBody ProdutoDTO produtoDTO, 
+	public void atualizarProduto(@Valid @RequestBody ProdutoDTO produtoDTO, 
 			@PathVariable Long produtoId) {
 		produtoService.atualizar(produtoDTO, produtoId);
 	}

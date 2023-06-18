@@ -2,10 +2,15 @@ package com.wamkti.wamk.acoes;
 
 import java.io.Serializable;
 
+import jakarta.validation.constraints.NotNull;
+
 public class Compre implements Serializable{
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private Long produtoId;
+	
+	@NotNull
 	private Integer quantidade;
 	
 	public Compre() {

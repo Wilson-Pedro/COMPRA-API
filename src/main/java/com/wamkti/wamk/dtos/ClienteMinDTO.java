@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wamkti.wamk.entities.Cliente;
 
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class ClienteMinDTO implements Serializable{
+public class ClienteMinDTO extends RepresentationModel<ClienteMinDTO> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;

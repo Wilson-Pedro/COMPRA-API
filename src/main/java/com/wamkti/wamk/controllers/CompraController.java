@@ -1,5 +1,8 @@
 package com.wamkti.wamk.controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ import com.wamkti.wamk.repositories.ProdutoRepository;
 import com.wamkti.wamk.services.ClienteService;
 import com.wamkti.wamk.services.CompraService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/compras")
 public class CompraController {
@@ -48,13 +53,22 @@ public class CompraController {
 
 	@GetMapping
 	public List<CompraMinDTO> listar(){
-		return compraAssembler.toCollectionMinDTO(compraService.findAll());
+		List<CompraMinDTO> list = compraService.findAll();
+		if(!list.isEmpty()) {
+			for(CompraMinDTO compra : list) {
+				Long id = compra.getId();
+				compra.add(linkTo(methodOn(CompraController.class).buscar(id)).withSelfRel());
+			}
+		}
+		
+		return list;
 	}
 	
 	@GetMapping(value = "/{compraId}")
 	public CompraDTO buscar(@PathVariable Long compraId) {
-		Compra compra = compraService.findById(compraId);
-		return new CompraDTO(compra);
+		CompraDTO compraDTO = compraService.findByIdDTO(compraId);
+		compraDTO.add(linkTo(methodOn(CompraController.class).listar()).withSelfRel());
+		return compraDTO;
 	}
 	
 	@PostMapping
@@ -81,7 +95,7 @@ public class CompraController {
 	
 	@PutMapping("/{clienteId}/compra")
 	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
-			@RequestBody Compre compre) {
+			@Valid @RequestBody Compre compre) {
 		var cliente = clienteRepository.findById(clienteId);
 		var produto = produtoRepository.findById(compre.getProdutoId());
 		var compra = compraService.findById(clienteId);

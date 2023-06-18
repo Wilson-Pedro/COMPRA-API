@@ -1,5 +1,8 @@
 package com.wamkti.wamk.controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +32,19 @@ public class ClienteController {
 	@GetMapping
 	public List<ClienteMinDTO> listar() {
 		List<ClienteMinDTO> list = clienteService.findAll();
+		if(!list.isEmpty()) {
+			for(ClienteMinDTO cliente : list) {
+				Long id = cliente.getId();
+				cliente.add(linkTo(methodOn(ClienteController.class).buscarPorId(id)).withSelfRel());
+			}
+		}
 		return list;
 	}
 	
 	@GetMapping(value = "/{clienteId}")
 	public ClienteDTO buscarPorId(@PathVariable Long clienteId) {
 		ClienteDTO clienteDTO = clienteService.findById(clienteId);
+		clienteDTO.add(linkTo(methodOn(ClienteController.class).listar()).withSelfRel());
 		return clienteDTO;
 	}
 	

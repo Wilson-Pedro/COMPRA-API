@@ -1,15 +1,18 @@
 package com.wamkti.wamk.dtos;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.entities.StatusCompra;
 
-public class CompraDTO {
-
+public class CompraDTO extends RepresentationModel<CompraDTO> implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private Integer clienteId;
 	private Integer items;

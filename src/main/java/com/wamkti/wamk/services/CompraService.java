@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wamkti.wamk.dtos.CompraDTO;
+import com.wamkti.wamk.dtos.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.repositories.CompraRepository;
 
@@ -18,14 +19,19 @@ public class CompraService {
 	private CompraRepository compraRepository;
 	
 	
-
-	public List<Compra> findAll() {
-		return compraRepository.findAll();
-		//return list.stream().map(x -> new CompraMinDTO(x)).toList();
+	public List<CompraMinDTO> findAll() {
+		//return compraRepository.findAll();
+		List<Compra> list = compraRepository.findAll();
+		return list.stream().map(x -> new CompraMinDTO(x)).toList();
 	}
 
 	public Compra findById(Long compraId) {
 		return compraRepository.findById(compraId).get();
+	}
+	
+	public CompraDTO findByIdDTO(Long compraId) {
+		Compra compra = compraRepository.findById(compraId).get();
+		return new CompraDTO(compra);
 	}
 
 	public void save(Compra compra) {
