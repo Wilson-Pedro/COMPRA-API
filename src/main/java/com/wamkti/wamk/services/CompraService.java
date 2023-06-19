@@ -36,9 +36,6 @@ public class CompraService {
 	}
 
 	public void save(Compra compra) {
-		compra.setTotal(0.0);
-		compra.setItems(0);
-		compra.setStatus(StatusCompra.COMPRANDO);
 		compraRepository.save(compra);
 	}
 	

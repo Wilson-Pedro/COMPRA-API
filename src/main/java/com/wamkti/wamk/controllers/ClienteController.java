@@ -43,7 +43,7 @@ public class ClienteController {
 	
 	@GetMapping(value = "/{clienteId}")
 	public ClienteDTO buscarPorId(@PathVariable Long clienteId) {
-		ClienteDTO clienteDTO = clienteService.findById(clienteId);
+		ClienteDTO clienteDTO = clienteService.findByIdDTO(clienteId);
 		clienteDTO.add(linkTo(methodOn(ClienteController.class).listar()).withSelfRel());
 		return clienteDTO;
 	}

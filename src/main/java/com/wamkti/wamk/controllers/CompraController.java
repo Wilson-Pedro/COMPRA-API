@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wamkti.wamk.acoes.Compre;
 import com.wamkti.wamk.assembler.CompraAssembler;
 import com.wamkti.wamk.dtos.CompraDTO;
+import com.wamkti.wamk.dtos.CompraInputDTO;
 import com.wamkti.wamk.dtos.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.entities.StatusCompra;
@@ -74,11 +75,14 @@ public class CompraController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CompraDTO adcionarCompra(@RequestBody CompraDTO compraDTO) {
-		Compra obj = compraAssembler.toEntity(compraDTO);
-		obj.setStatus(StatusCompra.COMPRANDO);
-		compraService.save(obj);
-		return compraAssembler.toDTO(obj);
+	public Compra adcionarCompra(@RequestBody CompraInputDTO compraInputDTO) {
+		Compra compra = new Compra();
+		compra.setClienteId(compraInputDTO.getClienteId());
+		compra.setTotal(0.0);
+		compra.setItems(0);
+		compra.setStatus(StatusCompra.COMPRANDO);
+		compraService.save(compra);
+		return compra;
 	}
 	
 	@PutMapping(value = "/{compraId}")
@@ -104,9 +108,9 @@ public class CompraController {
 		double subtotal = produto.get().getPreco() * items;
 		double dinheiroClinte = cliente.get().getDinheiro();
 		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Você não possui saldo suficiente para fazer esta compra");
-		} else if (!compra.getStatus().equals(StatusCompra.FINALIZADA)) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Sua compra já foi finalizada!");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
+		} else if (compra.getStatus().equals(StatusCompra.FINALIZADA)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sua compra já foi finalizada!");
 		}
 	
 		compraService.atualziar(compra, items, subtotal);
@@ -122,6 +126,15 @@ public class CompraController {
 		compra.setDataCompra(OffsetDateTime.now());
 		compraService.save(compra);
 		return ResponseEntity.ok("Compra finalizada!");
+		
+	}
+	
+	@PutMapping("/{clienteId}/comprando")
+	public ResponseEntity<Object> continuarComprando(@PathVariable Long clienteId){
+		var compra = compraService.findById(clienteId);
+		compra.setStatus(StatusCompra.COMPRANDO);
+		compraService.save(compra);
+		return ResponseEntity.ok("Você pode continuar comprando!");
 		
 	}
 }

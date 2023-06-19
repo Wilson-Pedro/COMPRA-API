@@ -22,8 +22,13 @@ public class ClienteService {
 		List<Cliente> list = clienteRepository.findAll();
 		return list.stream().map(x -> new ClienteMinDTO(x)).toList();
 	}
+	
+	public Cliente findById(Long clienteId) {
+		Cliente cliente = clienteRepository.findById(clienteId).get();
+		return cliente;
+	}
 
-	public ClienteDTO findById(Long clienteId) {
+	public ClienteDTO findByIdDTO(Long clienteId) {
 		Cliente cliente = clienteRepository.findById(clienteId).get();
 		return new ClienteDTO(cliente);
 	}

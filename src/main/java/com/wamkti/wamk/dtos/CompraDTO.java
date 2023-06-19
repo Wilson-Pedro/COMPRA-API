@@ -14,7 +14,7 @@ public class CompraDTO extends RepresentationModel<CompraDTO> implements Seriali
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private Integer clienteId;
+	private Long clienteId;
 	private Integer items;
 	private Double total;
 	private StatusCompra status;
@@ -35,11 +35,11 @@ public class CompraDTO extends RepresentationModel<CompraDTO> implements Seriali
 		this.id = id;
 	}
 
-	public Integer getClienteId() {
+	public Long getClienteId() {
 		return clienteId;
 	}
 
-	public void setClienteId(Integer clienteId) {
+	public void setClienteId(Long clienteId) {
 		this.clienteId = clienteId;
 	}
 

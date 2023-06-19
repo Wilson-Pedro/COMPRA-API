@@ -23,7 +23,7 @@ public class Compra {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
 	private Cliente cliente;
-	private Integer clienteId;
+	private Long clienteId;
 	private Integer items;
 	private Double total;
 	private StatusCompra status;
@@ -32,7 +32,7 @@ public class Compra {
 	public Compra() {
 	}
 
-	public Compra(Long id, Cliente cliente, Integer clienteId, Integer items, Double total, StatusCompra status,
+	public Compra(Long id, Cliente cliente, Long clienteId, Integer items, Double total, StatusCompra status,
 			OffsetDateTime dataCompra) {
 		this.id = id;
 		this.cliente = cliente;
@@ -59,11 +59,11 @@ public class Compra {
 		this.cliente = cliente;
 	}
 
-	public Integer getClienteId() {
+	public Long getClienteId() {
 		return clienteId;
 	}
 
-	public void setClienteId(Integer clienteId) {
+	public void setClienteId(Long clienteId) {
 		this.clienteId = clienteId;
 	}
 
