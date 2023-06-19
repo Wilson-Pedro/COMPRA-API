@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wamkti.wamk.dtos.CompraDTO;
 import com.wamkti.wamk.dtos.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
+import com.wamkti.wamk.entities.StatusCompra;
 import com.wamkti.wamk.repositories.CompraRepository;
 
 @Service
@@ -36,6 +37,8 @@ public class CompraService {
 
 	public void save(Compra compra) {
 		compra.setTotal(0.0);
+		compra.setItems(0);
+		compra.setStatus(StatusCompra.COMPRANDO);
 		compraRepository.save(compra);
 	}
 	

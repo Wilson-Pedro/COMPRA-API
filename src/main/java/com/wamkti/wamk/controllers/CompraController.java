@@ -3,6 +3,7 @@ package com.wamkti.wamk.controllers;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,12 +104,24 @@ public class CompraController {
 		double subtotal = produto.get().getPreco() * items;
 		double dinheiroClinte = cliente.get().getDinheiro();
 		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Você não possui saldo suficiente para fazer esta compra");
+		} else if (!compra.getStatus().equals(StatusCompra.FINALIZADA)) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Sua compra já foi finalizada!");
 		}
 	
 		compraService.atualziar(compra, items, subtotal);
 		clienteService.atualizarDinheiro(cliente.get(), subtotal);
 		
 		return ResponseEntity.ok("Compra realizado com suceesso");
+	}
+	
+	@PutMapping("/{clienteId}/finalizacao")
+	public ResponseEntity<Object> finalizarCompra(@PathVariable Long clienteId){
+		var compra = compraService.findById(clienteId);
+		compra.setStatus(StatusCompra.FINALIZADA);
+		compra.setDataCompra(OffsetDateTime.now());
+		compraService.save(compra);
+		return ResponseEntity.ok("Compra finalizada!");
+		
 	}
 }

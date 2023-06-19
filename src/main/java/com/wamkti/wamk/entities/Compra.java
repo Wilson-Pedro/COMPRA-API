@@ -101,7 +101,7 @@ public class Compra {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, status);
 	}
 
 	@Override
@@ -113,6 +113,6 @@ public class Compra {
 		if (getClass() != obj.getClass())
 			return false;
 		Compra other = (Compra) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(id, other.id) && status == other.status;
 	}
 }
