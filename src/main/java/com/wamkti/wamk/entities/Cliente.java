@@ -82,6 +82,14 @@ public class Cliente implements Serializable{
 		this.produtos = produtos;
 	}
 	
+	public Double getTotal() {
+		double sum = 0.0;
+		for(Produto p : produtos) {
+			sum += p.getSubTotal();
+		}
+		return sum;
+	}
+	
 
 	@Override
 	public int hashCode() {

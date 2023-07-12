@@ -39,9 +39,6 @@ public class CompraController {
 	
 	@Autowired
 	private CompraService compraService;
-
-	@Autowired
-	private CompraAssembler compraAssembler;
 	
 	@Autowired
 	private ClienteService clienteService;
@@ -98,9 +95,9 @@ public class CompraController {
 		compraService.deletePorId(compraId);
 	}
 	
-	@PutMapping("/{clienteId}/compra")
+	@PutMapping("/{clienteId}/comprando")
 	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
-			@Valid @RequestBody Compre compre) {
+			@RequestBody @Valid Compre compre) {
 		var cliente = clienteRepository.findById(clienteId);
 		var produto = produtoRepository.findById(compre.getProdutoId());
 		var compra = compraService.findById(clienteId);
@@ -129,7 +126,7 @@ public class CompraController {
 		
 	}
 	
-	@PutMapping("/{clienteId}/comprando")
+	@PutMapping("/{clienteId}/continuar")
 	public ResponseEntity<Object> continuarComprando(@PathVariable Long clienteId){
 		var compra = compraService.findById(clienteId);
 		compra.setStatus(StatusCompra.COMPRANDO);

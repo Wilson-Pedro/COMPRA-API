@@ -22,6 +22,8 @@ import com.wamkti.wamk.dtos.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.services.ClienteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -50,14 +52,14 @@ public class ClienteController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ClienteDTO adcionarCliente(@RequestBody ClienteDTO clienteDTO) {
+	public ClienteDTO adcionarCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
 		Cliente cliente = clienteService.copiarESalvar(clienteDTO);
 		return new ClienteDTO(cliente);
 	}
 	
 	@PutMapping(value = "/{clienteId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizarCliente(@RequestBody ClienteDTO clienteDTO, 
+	public void atualizarCliente(@RequestBody @Valid ClienteDTO clienteDTO, 
 			@PathVariable Long clienteId) {
 		clienteService.atualizarComDTO(clienteDTO, clienteId);
 	}

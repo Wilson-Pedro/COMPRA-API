@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotNull;
 public class Compre implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	@NotNull
+	@NotNull(message = "produtoId não pode ser nulo")
 	private Long produtoId;
 	
-	@NotNull
+	@NotNull(message = "quantidade produtoId não pode ser nulo")
 	private Integer quantidade;
 	
 	public Compre() {

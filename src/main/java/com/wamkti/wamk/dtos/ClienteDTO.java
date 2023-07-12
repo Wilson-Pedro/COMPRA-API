@@ -15,10 +15,10 @@ public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Seria
 	
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(message = "nome é obrigatório")
 	private String nome;
 	
-	@NotNull
+	@NotNull(message = "dinheiro não pode ser nulo")
 	private Double dinheiro;
 	
 	public ClienteDTO() {

@@ -15,10 +15,14 @@ public class ProdutoDTO extends RepresentationModel<ProdutoDTO> implements Seria
 	
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(message = "nomeProduto é obrigatório")
 	private String nomeProduto;
-	@NotNull
+	
+	@NotNull(message = "preco produtoId não pode ser nulo")
 	private Double preco;
+	
+	@NotNull(message = "quantidade produtoId não pode ser nulo")
+	private Integer quantidade;
 	
 	public ProdutoDTO() {
 	}
@@ -27,10 +31,11 @@ public class ProdutoDTO extends RepresentationModel<ProdutoDTO> implements Seria
 		BeanUtils.copyProperties(produto, this);
 	}
 
-	public ProdutoDTO(Long id, String nomeProduto, Double preco, Long idCliente) {
+	public ProdutoDTO(Long id, String nomeProduto, Double preco, Integer quantidade) {
 		this.id = id;
 		this.nomeProduto = nomeProduto;
 		this.preco = preco;
+		this.quantidade = quantidade;
 	}
 
 	public Long getId() {
@@ -55,5 +60,13 @@ public class ProdutoDTO extends RepresentationModel<ProdutoDTO> implements Seria
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
 	}
 }
