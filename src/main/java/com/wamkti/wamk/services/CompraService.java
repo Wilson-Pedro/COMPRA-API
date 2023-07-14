@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wamkti.wamk.dtos.CompraDTO;
 import com.wamkti.wamk.dtos.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
-import com.wamkti.wamk.entities.StatusCompra;
 import com.wamkti.wamk.repositories.CompraRepository;
 
 @Service
@@ -19,32 +18,41 @@ public class CompraService {
 	@Autowired
 	private CompraRepository compraRepository;
 	
-	
-	public List<CompraMinDTO> findAll() {
-		//return compraRepository.findAll();
+	@Transactional
+	public List<CompraMinDTO> findAllMinDTO() {
 		List<Compra> list = compraRepository.findAll();
 		return list.stream().map(x -> new CompraMinDTO(x)).toList();
 	}
+	
+	@Transactional
+	public List<Compra> findAll() {
+		return compraRepository.findAll();
+	}
 
+	@Transactional
 	public Compra findById(Long compraId) {
 		return compraRepository.findById(compraId).get();
 	}
 	
+	@Transactional
 	public CompraDTO findByIdDTO(Long compraId) {
 		Compra compra = compraRepository.findById(compraId).get();
 		return new CompraDTO(compra);
 	}
 
+	@Transactional
 	public void save(Compra compra) {
 		compraRepository.save(compra);
 	}
 	
+	@Transactional
 	public void atualziar(Compra compra, int items, double subtotal) {
 		compra.setItems(compra.getItems() + items);
 		compra.setTotal(compra.getTotal() + subtotal);
 		compraRepository.save(compra);
 	}
 
+	@Transactional
 	public void deletePorId(Long compraId) {
 		compraRepository.deleteById(compraId);
 		

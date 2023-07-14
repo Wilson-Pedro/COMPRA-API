@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
 @Entity
 @Table(name = "tbl_cliente")
 public class Cliente implements Serializable{

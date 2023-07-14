@@ -17,7 +17,7 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
-	public List<ProdutoDTO> findAll() {
+	public List<ProdutoDTO> findAllDTO() {
 		//return list.stream().map(x -> new ProdutoMinDTO(x)).toList();
 		List<Produto> list = produtoRepository.findAll();
 		return list.stream().map(x -> new ProdutoDTO(x)).toList();

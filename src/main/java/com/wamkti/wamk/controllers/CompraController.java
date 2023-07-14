@@ -3,12 +3,12 @@ package com.wamkti.wamk.controllers;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,19 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wamkti.wamk.acoes.Compre;
-import com.wamkti.wamk.assembler.CompraAssembler;
 import com.wamkti.wamk.dtos.CompraDTO;
 import com.wamkti.wamk.dtos.CompraInputDTO;
 import com.wamkti.wamk.dtos.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.entities.StatusCompra;
-import com.wamkti.wamk.repositories.ClienteRepository;
-import com.wamkti.wamk.repositories.ProdutoRepository;
-import com.wamkti.wamk.services.ClienteService;
+import com.wamkti.wamk.repositories.CompraRepository;
 import com.wamkti.wamk.services.CompraService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/compras")
@@ -41,18 +35,17 @@ public class CompraController {
 	private CompraService compraService;
 	
 	@Autowired
-	private ClienteService clienteService;
+	private CompraRepository compraRepository;
 	
-	@Autowired
-	private ClienteRepository clienteRepository;
-	
-	@Autowired
-	private ProdutoRepository produtoRepository;
-	
+//	@GetMapping
+//	public List<Compra> listar(){
+//		List<Compra> list = compraService.findAll();
+//		return list;
+//	}
 
 	@GetMapping
-	public List<CompraMinDTO> listar(){
-		List<CompraMinDTO> list = compraService.findAll();
+	public List<CompraMinDTO> listarMinDTO(){
+		List<CompraMinDTO> list = compraService.findAllMinDTO();
 		if(!list.isEmpty()) {
 			for(CompraMinDTO compra : list) {
 				Long id = compra.getId();
@@ -63,10 +56,17 @@ public class CompraController {
 		return list;
 	}
 	
+	@GetMapping("/page")
+	public Page<CompraDTO> page(Pageable pageable){
+		Page<Compra> pages = compraRepository.findAll(pageable);
+		Page<CompraDTO> pagesDTO = pages.map(CompraDTO::new);
+		return pagesDTO;
+	}
+	
 	@GetMapping(value = "/{compraId}")
 	public CompraDTO buscar(@PathVariable Long compraId) {
 		CompraDTO compraDTO = compraService.findByIdDTO(compraId);
-		compraDTO.add(linkTo(methodOn(CompraController.class).listar()).withSelfRel());
+		compraDTO.add(linkTo(methodOn(CompraController.class).listarMinDTO()).withSelfRel());
 		return compraDTO;
 	}
 	
@@ -74,7 +74,6 @@ public class CompraController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Compra adcionarCompra(@RequestBody CompraInputDTO compraInputDTO) {
 		Compra compra = new Compra();
-		compra.setClienteId(compraInputDTO.getClienteId());
 		compra.setTotal(0.0);
 		compra.setItems(0);
 		compra.setStatus(StatusCompra.COMPRANDO);
@@ -93,45 +92,5 @@ public class CompraController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletarCompra(@PathVariable Long compraId) {
 		compraService.deletePorId(compraId);
-	}
-	
-	@PutMapping("/{clienteId}/comprando")
-	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
-			@RequestBody @Valid Compre compre) {
-		var cliente = clienteRepository.findById(clienteId);
-		var produto = produtoRepository.findById(compre.getProdutoId());
-		var compra = compraService.findById(clienteId);
-		int items = compre.getQuantidade();
-		double subtotal = produto.get().getPreco() * items;
-		double dinheiroClinte = cliente.get().getDinheiro();
-		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
-		} else if (compra.getStatus().equals(StatusCompra.FINALIZADA)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sua compra já foi finalizada!");
-		}
-	
-		compraService.atualziar(compra, items, subtotal);
-		clienteService.atualizarDinheiro(cliente.get(), subtotal);
-		
-		return ResponseEntity.ok("Compra realizado com suceesso");
-	}
-	
-	@PutMapping("/{clienteId}/finalizacao")
-	public ResponseEntity<Object> finalizarCompra(@PathVariable Long clienteId){
-		var compra = compraService.findById(clienteId);
-		compra.setStatus(StatusCompra.FINALIZADA);
-		compra.setDataCompra(OffsetDateTime.now());
-		compraService.save(compra);
-		return ResponseEntity.ok("Compra finalizada!");
-		
-	}
-	
-	@PutMapping("/{clienteId}/continuar")
-	public ResponseEntity<Object> continuarComprando(@PathVariable Long clienteId){
-		var compra = compraService.findById(clienteId);
-		compra.setStatus(StatusCompra.COMPRANDO);
-		compraService.save(compra);
-		return ResponseEntity.ok("Você pode continuar comprando!");
-		
 	}
 }

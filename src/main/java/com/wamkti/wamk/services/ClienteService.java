@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +20,15 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 
-	public List<ClienteMinDTO> findAll() {
+	public List<ClienteMinDTO> findAllMinDTO() {
 		List<Cliente> list = clienteRepository.findAll();
 		return list.stream().map(x -> new ClienteMinDTO(x)).toList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Page<ClienteMinDTO> page(Pageable pageable) {
+		Page<Cliente> list = clienteRepository.findAll(pageable);
+		return (Page<ClienteMinDTO>) list.stream().map(x -> new ClienteMinDTO(x)).toList();
 	}
 	
 	public Cliente findById(Long clienteId) {

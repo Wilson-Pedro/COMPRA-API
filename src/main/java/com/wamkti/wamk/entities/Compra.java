@@ -1,7 +1,10 @@
 package com.wamkti.wamk.entities;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,16 +17,17 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tbl_compra")
-public class Compra {
+public class Compra implements Serializable{
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
-	private Long clienteId;
 	private Integer items;
 	private Double total;
 	private StatusCompra status;
@@ -32,11 +36,10 @@ public class Compra {
 	public Compra() {
 	}
 
-	public Compra(Long id, Cliente cliente, Long clienteId, Integer items, Double total, StatusCompra status,
+	public Compra(Long id, Cliente cliente, Integer items, Double total, StatusCompra status,
 			OffsetDateTime dataCompra) {
 		this.id = id;
 		this.cliente = cliente;
-		this.clienteId = clienteId;
 		this.items = items;
 		this.total = total;
 		this.status = status;
@@ -57,14 +60,6 @@ public class Compra {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
-	}
-
-	public Long getClienteId() {
-		return clienteId;
-	}
-
-	public void setClienteId(Long clienteId) {
-		this.clienteId = clienteId;
 	}
 
 	public Integer getItems() {

@@ -46,9 +46,9 @@ public class CompraApplication implements CommandLineRunner{
 		cli2.getProdutos().addAll(Arrays.asList(p2));
 		cli3.getProdutos().addAll(Arrays.asList(p3));
 		
-		Compra c1 = new Compra(1L, cli1, null, 0, 0.0, StatusCompra.COMPRANDO, null);
-		Compra c2 = new Compra(2L, cli2, null, 0, 0.0, StatusCompra.COMPRANDO, null);
-		Compra c3 = new Compra(3L, cli3, null, 0, 0.0, StatusCompra.COMPRANDO, null);
+		Compra c1 = new Compra(null, cli1, 0, 0.0, StatusCompra.COMPRANDO, null);
+		Compra c2 = new Compra(null, cli2, 0, 0.0, StatusCompra.COMPRANDO, null);
+		Compra c3 = new Compra(null, cli3, 0, 0.0, StatusCompra.COMPRANDO, null);
 		
 		clienteRepository.saveAll(Arrays.asList(cli1, cli2, cli3));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
