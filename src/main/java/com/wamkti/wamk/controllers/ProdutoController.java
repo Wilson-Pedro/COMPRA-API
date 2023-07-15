@@ -67,6 +67,12 @@ public class ProdutoController {
 		return produtoDTO;
 	}
 	
+	@GetMapping(value = "/{clienteId}/produtos")
+	public List<ProdutoDTO> findByCliente(@PathVariable Long clienteId) {
+		List<ProdutoDTO> list = produtoService.findByCliente(clienteId);
+		return list;
+	}
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoDTO adcionarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wamkti.wamk.dtos.ProdutoDTO;
 import com.wamkti.wamk.entities.Produto;
+import com.wamkti.wamk.projections.ProdutoMinProjection;
+import com.wamkti.wamk.repositories.ClienteRepository;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 
 @Service
@@ -16,6 +18,9 @@ public class ProdutoService {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 
 	public List<ProdutoDTO> findAllDTO() {
 		//return list.stream().map(x -> new ProdutoMinDTO(x)).toList();
@@ -56,5 +61,20 @@ public class ProdutoService {
 		BeanUtils.copyProperties(produtoDTO, produto);
 		produto.setId(produtoId);
 		produtoRepository.save(produto);
+	}
+
+	@Transactional
+	public void atulizarClienteIdDoProoduto(Long clienteId, Long produtoId) {
+		var cliente = clienteRepository.findById(clienteId);
+		var produto = produtoRepository.findById(produtoId);
+		produto.get().setCliente(cliente.get());
+		produto.get().setId(produtoId);
+		produtoRepository.save(produto.get());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<ProdutoDTO> findByCliente(Long clienteId){
+		List<ProdutoMinProjection> list = produtoRepository.searchByList(clienteId);
+		return list.stream().map(x -> new ProdutoDTO(x)).toList();
 	}
 }

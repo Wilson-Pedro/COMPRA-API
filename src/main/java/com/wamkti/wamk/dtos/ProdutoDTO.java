@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.wamkti.wamk.entities.Produto;
+import com.wamkti.wamk.projections.ProdutoMinProjection;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +37,13 @@ public class ProdutoDTO extends RepresentationModel<ProdutoDTO> implements Seria
 		this.nomeProduto = nomeProduto;
 		this.preco = preco;
 		this.quantidade = quantidade;
+	}
+	
+	public ProdutoDTO(ProdutoMinProjection entity) {
+		id = entity.getId();
+		nomeProduto = entity.getNomeProduto();
+		preco = entity.getPreco();
+		quantidade = entity.getQuantidade();
 	}
 
 	public Long getId() {

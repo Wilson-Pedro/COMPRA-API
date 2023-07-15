@@ -40,7 +40,7 @@ public class CompraApplication implements CommandLineRunner{
 		
 		Produto p1 = new Produto(null, "Relógio", 20.0, 1, cli1);
 		Produto p2 = new Produto(null, "Celular", 2500.0, 1, cli2);
-		Produto p3 = new Produto(null, "Celular", 850.0, 1, cli3);
+		Produto p3 = new Produto(null, "Livro", 850.0, 1, cli3);
 		
 		cli1.getProdutos().addAll(Arrays.asList(p1));
 		cli2.getProdutos().addAll(Arrays.asList(p2));

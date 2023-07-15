@@ -30,6 +30,7 @@ import com.wamkti.wamk.repositories.ClienteRepository;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 import com.wamkti.wamk.services.ClienteService;
 import com.wamkti.wamk.services.CompraService;
+import com.wamkti.wamk.services.ProdutoService;
 
 import jakarta.validation.Valid;
 
@@ -42,6 +43,9 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ProdutoService produtoService;
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
@@ -112,6 +116,7 @@ public class ClienteController {
 	
 		compraService.atualziar(compra, items, subtotal);
 		clienteService.atualizarDinheiro(cliente.get(), subtotal);
+		produtoService.atulizarClienteIdDoProoduto(clienteId, compre.getProdutoId());
 		
 		return ResponseEntity.ok("Compra realizado com suceesso");
 	}
