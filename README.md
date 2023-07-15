@@ -66,6 +66,52 @@ http://localhost:8080/clientes/7
 ```
 ![DELETE](https://github.com/Wilson-Pedro/images/blob/main/compra/endpoints/DELETE.PNG)
 
+## Outros EndPoints:
+# Produto
+```
+http://localhost:8080/produtos
+```
+```
+http://localhost:8080/produtos/page
+```
+```
+http://localhost:8080/produtos/1
+```
+```
+http://localhost:8080/produtos/1/produtos
+```
+```
+http://localhost:8080/produtos/1
+```
+```
+http://localhost:8080/produtos/1
+```
+
+# Compra
+```
+http://localhost:8080/compras
+```
+```
+http://localhost:8080/compras/page
+```
+```
+http://localhost:8080/compras/1
+```
+```
+http://localhost:8080/compras
+```
+```
+http://localhost:8080/compras/1
+```
+```
+http://localhost:8080/clientes/1/finalizacao
+```
+```
+http://localhost:8080/clientes/1/continuar
+```
+```
+http://localhost:8080/compras/2
+```
 
 ## Autor
 
