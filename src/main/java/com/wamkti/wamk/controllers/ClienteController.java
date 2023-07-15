@@ -131,7 +131,7 @@ public class ClienteController {
 		
 	}
 	
-	@PutMapping("/{clienteId}/continuar")
+	@PutMapping("/{clienteId}/continuacao")
 	public ResponseEntity<Object> continuarComprando(@PathVariable Long clienteId){
 		var compra = compraService.findById(clienteId);
 		compra.setStatus(StatusCompra.COMPRANDO);
