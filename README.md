@@ -28,13 +28,15 @@ Depois de ter instalado as ferramentas, crie uma pasta e de um nome a ela. Entã
 git clone git@github.com:Wilson-Pedro/COMPRA-API.git
 ```
 
-Após isso abra o STS ou qualquer IDE que suporte o SPRING e execute o projeto.
+Após isso abra o projeto no STS ou qualquer IDE que suporte o SPRING.
 
--> Com o STS vá em 'CarInsurenceApplication.java' e clique com o potão direito.
+-> Com o STS vá em 'Compra' e clique com o potão direito.
 
 -> Vá em 'Run As'.
 
 -> E clique em 'Spring Boot App'
+
+![START-PROJECT](https://github.com/Wilson-Pedro/images/blob/main/compra/start-projet-compra.png)
 
 # POST
 ```
