@@ -68,7 +68,19 @@ http://localhost:8080/clientes/7
 ```
 ![DELETE](https://github.com/Wilson-Pedro/images/blob/main/compra/endpoints/DELETE.PNG)
 
-## Outros EndPoints:
+# Outros EndPoints:
+# Cliente
+```
+http://localhost:8080/compras/page
+```
+```
+http://localhost:8080/clientes/1/finalizacao
+```
+```
+http://localhost:8080/clientes/1/continuacao
+```
+
+
 # Produto
 ```
 http://localhost:8080/produtos
