@@ -22,16 +22,19 @@ public class ProdutoService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 
+	@Transactional
 	public List<ProdutoDTO> findAllDTO() {
 		//return list.stream().map(x -> new ProdutoMinDTO(x)).toList();
 		List<Produto> list = produtoRepository.findAll();
 		return list.stream().map(x -> new ProdutoDTO(x)).toList();
 	}
 
+	@Transactional
 	public Produto findById(Long produtoId) {
 		return produtoRepository.findById(produtoId).get();
 	}
 	
+	@Transactional
 	public ProdutoDTO findByIdDTO(Long produtoId) {
 		Produto prouduto = produtoRepository.findById(produtoId).get();
 		return new ProdutoDTO(prouduto);
@@ -76,5 +79,9 @@ public class ProdutoService {
 	public List<ProdutoDTO> findByCliente(Long clienteId){
 		List<ProdutoMinProjection> list = produtoRepository.searchByList(clienteId);
 		return list.stream().map(x -> new ProdutoDTO(x)).toList();
+	}
+	
+	public boolean existsByNomeProduto(String nomeProduto) {
+		return produtoRepository.existsByNomeProduto(nomeProduto);
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,15 +71,25 @@ public class ProdutoController {
 	@GetMapping(value = "/{clienteId}/produtos")
 	public List<ProdutoDTO> findByCliente(@PathVariable Long clienteId) {
 		List<ProdutoDTO> list = produtoService.findByCliente(clienteId);
+		if(!list.isEmpty()) {
+			for(ProdutoDTO produtoDTO : list) {
+				Long id = produtoDTO.getId();
+				produtoDTO.add(linkTo(methodOn(ProdutoController.class).buscar(id)).withSelfRel());
+			}
+		}
 		return list;
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoDTO adcionarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
+	public ResponseEntity<Object> adcionarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
 		Produto obj = produtoAssembler.toEntity(produtoDTO);
+		if(produtoService.existsByNomeProduto(obj.getNomeProduto())) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Produto " + obj.getNomeProduto() + " já existe.");
+		}
 		produtoService.save(obj);
-		return produtoAssembler.toDTO(obj);
+		produtoAssembler.toDTO(obj);
+		return ResponseEntity.ok().body(obj);
 	}
 	
 	@PutMapping(value = "/{produtoId}")

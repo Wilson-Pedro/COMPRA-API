@@ -19,4 +19,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 			ORDER BY preco
 			""")
 	List<ProdutoMinProjection> searchByList(Long clienteId);
+	
+	boolean existsByNomeProduto(String nomeProduto);
 }
