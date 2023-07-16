@@ -31,7 +31,7 @@ git clone git@github.com:Wilson-Pedro/COMPRA-API.git
 
 Após isso abra o projeto no STS ou qualquer IDE que suporte o SPRING.
 
--> Com o STS vá em 'Compra' e clique com o potão direito.
+-> Com o STS vá em 'Compra.java' e clique com o potão direito.
 
 -> Vá em 'Run As'.
 
