@@ -18,11 +18,12 @@ sistemas e serviços.
 Para rodar o projeto localmente faça o download das seguintes ferramentas:
 
 - [STS](https://spring.io.xy2401.com/tools3/sts/all/)
-- [PostgreSQL](https://www.postgresql.org/download/)
 - [Postman](https://www.postman.com/downloads/)
 - [Git](https://git-scm.com/downloads)
 
-Depois de ter instalado as ferramentas, crie uma pasta e de um nome a ela. Então abra o seu terminal nessa pasta. e digite o seguinte comando:
+Depois de ter instalado as ferramentas, crie uma pasta e de um nome a ela. Então abra o seu git bash nessa pasta. e digite o seguinte comando:
+
+![ABRIR-GIT-BASH](https://github.com/Wilson-Pedro/images/blob/main/git-bash/abrir-git-bash.png)
 
 ```bash
 git clone git@github.com:Wilson-Pedro/COMPRA-API.git
@@ -37,6 +38,10 @@ Após isso abra o projeto no STS ou qualquer IDE que suporte o SPRING.
 -> E clique em 'Spring Boot App'
 
 ![START-PROJECT](https://github.com/Wilson-Pedro/images/blob/main/compra/start-projet-compra.png)
+
+
+# Abra o [Postman](https://www.postman.com/downloads/) e teste o seguintes endpoints:
+
 
 # POST
 ```
