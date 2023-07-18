@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wamkti.wamk.dtos.CompraDTO;
-import com.wamkti.wamk.dtos.CompraMinDTO;
+import com.wamkti.wamk.dtos.min.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.repositories.CompraRepository;
 

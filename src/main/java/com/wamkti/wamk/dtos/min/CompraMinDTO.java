@@ -1,4 +1,4 @@
-package com.wamkti.wamk.dtos;
+package com.wamkti.wamk.dtos.min;
 
 import java.io.Serializable;
 

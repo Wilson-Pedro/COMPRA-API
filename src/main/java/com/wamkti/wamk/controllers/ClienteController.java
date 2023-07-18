@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wamkti.wamk.acoes.Compre;
 import com.wamkti.wamk.dtos.ClienteDTO;
-import com.wamkti.wamk.dtos.ClienteMinDTO;
+import com.wamkti.wamk.dtos.min.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.entities.StatusCompra;
 import com.wamkti.wamk.repositories.ClienteRepository;
@@ -68,15 +68,15 @@ public class ClienteController {
 	@GetMapping("/page")
 	public ResponseEntity<Page<ClienteDTO>> paginar(Pageable pageable) {
 		Page<Cliente> pages = clienteRepository.findAll(pageable);
-		Page<ClienteDTO> pagesDTO = pages.map(ClienteDTO::new);
-		return ResponseEntity.ok(pagesDTO);
+		Page<ClienteDTO> pagesDto = pages.map(ClienteDTO::new);
+		return ResponseEntity.ok(pagesDto);
 	}
 	
 	@GetMapping(value = "/{clienteId}")
 	public ClienteDTO buscarPorId(@PathVariable Long clienteId) {
-		ClienteDTO clienteDTO = clienteService.findByIdDTO(clienteId);
-		clienteDTO.add(linkTo(methodOn(ClienteController.class).listarDTO()).withSelfRel());
-		return clienteDTO;
+		ClienteDTO clienteDto = clienteService.findByIdDTO(clienteId);
+		clienteDto.add(linkTo(methodOn(ClienteController.class).listarDTO()).withSelfRel());
+		return clienteDto;
 	}
 	
 	@PostMapping
@@ -99,7 +99,7 @@ public class ClienteController {
 		clienteService.deletePorId(clienteId);
 	}
 	
-	@PutMapping("/{clienteId}/comprando")
+	@PutMapping("/{clienteId}/compras")
 	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
 			@RequestBody @Valid Compre compre) {
 		var cliente = clienteRepository.findById(clienteId);
@@ -112,11 +112,17 @@ public class ClienteController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
 		} else if (compra.getStatus().equals(StatusCompra.FINALIZADA)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sua compra já foi finalizada!");
+		} else if (compre.getQuantidade() >= produto.get().getEstoque()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+					"Estoque insuficiente."
+					+ "\nQuantidade demandada: " + compre.getQuantidade()
+					+ "\nQuantidade em estoque: " + produto.get().getEstoque());
 		}
 	
 		compraService.atualziar(compra, items, subtotal);
 		clienteService.atualizarDinheiro(cliente.get(), subtotal);
-		produtoService.atulizarClienteIdDoProoduto(clienteId, compre.getProdutoId());
+		produtoService.atualizarEstoque(compre.getQuantidade(), compre.getProdutoId());
+		produtoService.atulizarClienteIdDoProduto(clienteId, compre.getProdutoId());
 		
 		return ResponseEntity.ok("Compra realizado com suceesso");
 	}

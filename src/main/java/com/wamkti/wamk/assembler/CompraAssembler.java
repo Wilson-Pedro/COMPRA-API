@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wamkti.wamk.dtos.CompraDTO;
-import com.wamkti.wamk.dtos.CompraMinDTO;
+import com.wamkti.wamk.dtos.min.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
 
 @Component

@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wamkti.wamk.assembler.ProdutoAssembler;
+import com.wamkti.wamk.dtos.ProdutoCompradoDTO;
 import com.wamkti.wamk.dtos.ProdutoDTO;
+import com.wamkti.wamk.dtos.inputs.ProdutoInputDTO;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 import com.wamkti.wamk.services.ProdutoService;
@@ -69,12 +71,12 @@ public class ProdutoController {
 	}
 	
 	@GetMapping(value = "/{clienteId}/produtos")
-	public List<ProdutoDTO> findByCliente(@PathVariable Long clienteId) {
-		List<ProdutoDTO> list = produtoService.findByCliente(clienteId);
+	public List<ProdutoCompradoDTO> findByCliente(@PathVariable Long clienteId) {
+		List<ProdutoCompradoDTO> list = produtoService.findByCliente(clienteId);
 		if(!list.isEmpty()) {
-			for(ProdutoDTO produtoDTO : list) {
-				Long id = produtoDTO.getId();
-				produtoDTO.add(linkTo(methodOn(ProdutoController.class).buscar(id)).withSelfRel());
+			for(ProdutoCompradoDTO obj : list) {
+				Long id = obj.getId();
+				obj.add(linkTo(methodOn(ProdutoController.class).buscar(id)).withSelfRel());
 			}
 		}
 		return list;
@@ -82,14 +84,15 @@ public class ProdutoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> adcionarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
-		Produto obj = produtoAssembler.toEntity(produtoDTO);
+	public ResponseEntity<Object> adcionarProduto(@Valid @RequestBody ProdutoInputDTO produtoInputDto) {
+		Produto obj = produtoAssembler.toEntity(produtoInputDto);
 		if(produtoService.existsByNomeProduto(obj.getNomeProduto())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Produto " + obj.getNomeProduto() + " já existe.");
 		}
+		obj.setId(null);
 		produtoService.save(obj);
-		produtoAssembler.toDTO(obj);
-		return ResponseEntity.ok().body(obj);
+		var inputDto = new ProdutoInputDTO(obj);
+		return ResponseEntity.ok().body(inputDto);
 	}
 	
 	@PutMapping(value = "/{produtoId}")

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wamkti.wamk.dtos.ProdutoDTO;
+import com.wamkti.wamk.dtos.inputs.ProdutoInputDTO;
 import com.wamkti.wamk.entities.Produto;
 
 @Component
@@ -20,6 +21,10 @@ public class ProdutoAssembler {
 		return modelMapper.map(produto, ProdutoDTO.class);
 	}
 	
+	public ProdutoInputDTO toInputDTO(Produto produto) {
+		return modelMapper.map(produto, ProdutoInputDTO.class);
+	}
+	
 	public List<ProdutoDTO> toCollectionDTO(List<Produto> produtos){
 		return produtos.stream()
 				.map(this::toDTO)
@@ -27,6 +32,10 @@ public class ProdutoAssembler {
 	}
 	
 	public Produto toEntity(ProdutoDTO produtoDTO) {
+		return modelMapper.map(produtoDTO, Produto.class);
+	}
+	
+	public Produto toEntity(ProdutoInputDTO produtoDTO) {
 		return modelMapper.map(produtoDTO, Produto.class);
 	}
 }

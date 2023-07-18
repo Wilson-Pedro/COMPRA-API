@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wamkti.wamk.dtos.CompraDTO;
-import com.wamkti.wamk.dtos.CompraInputDTO;
-import com.wamkti.wamk.dtos.CompraMinDTO;
+import com.wamkti.wamk.dtos.inputs.CompraInputDTO;
+import com.wamkti.wamk.dtos.min.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
 import com.wamkti.wamk.entities.StatusCompra;
 import com.wamkti.wamk.repositories.CompraRepository;

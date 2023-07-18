@@ -38,21 +38,25 @@ public class CompraApplication implements CommandLineRunner{
 		Cliente cli2 = new Cliente(null, "Ana Julia", 7000.0);
 		Cliente cli3 = new Cliente(null, "Julio Cezar", 4500.0);
 		
-		Produto p1 = new Produto(null, "Relógio", 20.0, 1, cli1);
-		Produto p2 = new Produto(null, "Celular", 2500.0, 1, cli2);
-		Produto p3 = new Produto(null, "Livro", 850.0, 1, cli3);
-		
-		cli1.getProdutos().addAll(Arrays.asList(p1));
-		cli2.getProdutos().addAll(Arrays.asList(p2));
-		cli3.getProdutos().addAll(Arrays.asList(p3));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2, cli3));
 		
 		Compra c1 = new Compra(null, cli1, 0, 0.0, StatusCompra.COMPRANDO, null);
 		Compra c2 = new Compra(null, cli2, 0, 0.0, StatusCompra.COMPRANDO, null);
 		Compra c3 = new Compra(null, cli3, 0, 0.0, StatusCompra.COMPRANDO, null);
 		
-		clienteRepository.saveAll(Arrays.asList(cli1, cli2, cli3));
-		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 		compraRepository.saveAll(Arrays.asList(c1, c2, c3));
+		
+		Produto p1 = new Produto(null, "Relógio", 20.0, cli1, 10);
+		Produto p2 = new Produto(null, "Celular", 2500.0, cli2, 10);
+		Produto p3 = new Produto(null, "Livro", 850.0, cli3, 10);
+		
+		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+		
+		cli1.getProdutos().addAll(Arrays.asList(p1));
+		cli2.getProdutos().addAll(Arrays.asList(p2));
+		cli3.getProdutos().addAll(Arrays.asList(p3));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2, cli3));
 	}
 
 }

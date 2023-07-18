@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wamkti.wamk.dtos.ClienteDTO;
-import com.wamkti.wamk.dtos.ClienteMinDTO;
+import com.wamkti.wamk.dtos.min.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.repositories.ClienteRepository;
 

@@ -1,4 +1,4 @@
-package com.wamkti.wamk.dtos;
+package com.wamkti.wamk.dtos.min;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wamkti.wamk.dtos.ProdutoDTO;
 import com.wamkti.wamk.entities.Cliente;
 
 import jakarta.persistence.Embeddable;

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wamkti.wamk.dtos.ProdutoCompradoDTO;
 import com.wamkti.wamk.dtos.ProdutoDTO;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.projections.ProdutoMinProjection;
@@ -67,7 +68,7 @@ public class ProdutoService {
 	}
 
 	@Transactional
-	public void atulizarClienteIdDoProoduto(Long clienteId, Long produtoId) {
+	public void atulizarClienteIdDoProduto(Long clienteId, Long produtoId) {
 		var cliente = clienteRepository.findById(clienteId);
 		var produto = produtoRepository.findById(produtoId);
 		produto.get().setCliente(cliente.get());
@@ -76,12 +77,21 @@ public class ProdutoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<ProdutoDTO> findByCliente(Long clienteId){
+	public List<ProdutoCompradoDTO> findByCliente(Long clienteId){
 		List<ProdutoMinProjection> list = produtoRepository.searchByList(clienteId);
-		return list.stream().map(x -> new ProdutoDTO(x)).toList();
+		return list.stream().map(x -> new ProdutoCompradoDTO(x)).toList();
 	}
 	
 	public boolean existsByNomeProduto(String nomeProduto) {
 		return produtoRepository.existsByNomeProduto(nomeProduto);
 	}
+
+	public void atualizarEstoque(Integer quantidadeCompra, Long produtoId) {
+		var produto = produtoRepository.findById(produtoId);
+		Integer estoque = produto.get().getEstoque();
+		produto.get().setEstoque(estoque - quantidadeCompra);
+		produto.get().setId(produtoId);
+		produtoRepository.save(produto.get());
+	}
+
 }

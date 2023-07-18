@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "tbl_cliente")
 public class Cliente implements Serializable{
@@ -25,7 +27,7 @@ public class Cliente implements Serializable{
 	private String nome;
 	private Double dinheiro;
 	
-	@OneToOne(mappedBy = "cliente")
+	@OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private Compra compra;
 	
 	@JsonIgnore
@@ -80,15 +82,6 @@ public class Cliente implements Serializable{
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
 	}
-	
-	public Double getTotal() {
-		double sum = 0.0;
-		for(Produto p : produtos) {
-			sum += p.getSubTotal();
-		}
-		return sum;
-	}
-	
 
 	@Override
 	public int hashCode() {

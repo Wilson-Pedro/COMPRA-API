@@ -1,5 +1,6 @@
 package com.wamkti.wamk.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -12,14 +13,15 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tbl_produto")
-public class Produto {
+public class Produto implements Serializable{
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nomeProduto;
 	private Double preco;
-	private Integer quantidade;
+	private Integer estoque;
 	
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
@@ -28,12 +30,12 @@ public class Produto {
 	public Produto() {
 	}
 	
-	public Produto(Long id, String nomeProduto, Double preco, Integer quantidade, Cliente cliente) {
+	public Produto(Long id, String nomeProduto, Double preco, Cliente cliente, Integer estoque) {
 		this.id = id;
 		this.nomeProduto = nomeProduto;
 		this.preco = preco;
 		this.cliente = cliente;
-		this.quantidade = quantidade;
+		this.estoque = estoque;
 	}
 
 	public Long getId() {
@@ -60,20 +62,16 @@ public class Produto {
 		this.preco = preco;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public Integer getEstoque() {
+		return estoque;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setEstoque(Integer estoque) {
+		this.estoque = estoque;
 	}
 
 	public Cliente getCliente() {
 		return cliente;
-	}
-	
-	public Double getSubTotal() {
-		return preco * quantidade;
 	}
 
 	public void setCliente(Cliente cliente) {
