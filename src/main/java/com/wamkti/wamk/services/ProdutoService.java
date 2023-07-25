@@ -68,7 +68,7 @@ public class ProdutoService {
 	}
 
 	@Transactional
-	public void atulizarClienteIdDoProduto(Long clienteId, Long produtoId) {
+	public void atulizarClienteIdDoPedido(Long clienteId, Long produtoId) {
 		var cliente = clienteRepository.findById(clienteId);
 		var produto = produtoRepository.findById(produtoId);
 		produto.get().setCliente(cliente.get());

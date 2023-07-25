@@ -11,7 +11,7 @@ public class CompraMinDTO extends RepresentationModel<CompraMinDTO> implements S
 	
 	private Long id;
 	private String nomeCliente;
-	private Integer items;
+	private Integer quantidadeItems;
 	private Double total;
 	
 	public CompraMinDTO() {
@@ -20,7 +20,7 @@ public class CompraMinDTO extends RepresentationModel<CompraMinDTO> implements S
 	public CompraMinDTO(Compra compra) {
 		id = compra.getId();
 		nomeCliente = compra.getCliente().getNome();
-		items = compra.getItems();
+		quantidadeItems = compra.getQuantidadeItems();
 		total = compra.getTotal();
 	}
 
@@ -40,12 +40,12 @@ public class CompraMinDTO extends RepresentationModel<CompraMinDTO> implements S
 		this.nomeCliente = nomeCliente;
 	}
 
-	public Integer getItems() {
-		return items;
+	public Integer getQuantidadeItems() {
+		return quantidadeItems;
 	}
 
-	public void setItems(Integer items) {
-		this.items = items;
+	public void setQuantidadeItems(Integer quantidadeItems) {
+		this.quantidadeItems = quantidadeItems;
 	}
 
 	public Double getTotal() {

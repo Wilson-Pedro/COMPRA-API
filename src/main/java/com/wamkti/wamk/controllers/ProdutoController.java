@@ -70,7 +70,7 @@ public class ProdutoController {
 		return produtoDTO;
 	}
 	
-	@GetMapping(value = "/{clienteId}/produtos")
+	@GetMapping(value = "/{clienteId}/clientes")
 	public List<ProdutoCompradoDTO> findByCliente(@PathVariable Long clienteId) {
 		List<ProdutoCompradoDTO> list = produtoService.findByCliente(clienteId);
 		if(!list.isEmpty()) {

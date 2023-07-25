@@ -1,7 +1,13 @@
 package com.wamkti.wamk.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,6 +34,10 @@ public class Produto implements Serializable{
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
 	public Produto() {
 	}
 	
@@ -36,6 +47,15 @@ public class Produto implements Serializable{
 		this.preco = preco;
 		this.cliente = cliente;
 		this.estoque = estoque;
+	}
+	
+	@JsonIgnore
+	public List<Cliente> getClientes(){
+		List<Cliente> list = new ArrayList<>();
+		for(ItemPedido x : itens) {
+			list.add(x.getCliente());
+		}
+		return list;
 	}
 
 	public Long getId() {
@@ -76,6 +96,14 @@ public class Produto implements Serializable{
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
 	}
 
 	@Override

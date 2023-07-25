@@ -47,7 +47,7 @@ public class CompraService {
 	
 	@Transactional
 	public void atualziar(Compra compra, int items, double subtotal) {
-		compra.setItems(compra.getItems() + items);
+		compra.setQuantidadeItems(compra.getQuantidadeItems() + items);
 		compra.setTotal(compra.getTotal() + subtotal);
 		compraRepository.save(compra);
 	}

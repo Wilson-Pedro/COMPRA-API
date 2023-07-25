@@ -1,4 +1,4 @@
-package com.wamkti.wamk.entities;
+package com.wamkti.wamk.entities.enums;
 
 public enum StatusCompra {
 

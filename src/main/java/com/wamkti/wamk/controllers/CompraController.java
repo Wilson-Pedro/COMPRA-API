@@ -23,7 +23,7 @@ import com.wamkti.wamk.dtos.CompraDTO;
 import com.wamkti.wamk.dtos.inputs.CompraInputDTO;
 import com.wamkti.wamk.dtos.min.CompraMinDTO;
 import com.wamkti.wamk.entities.Compra;
-import com.wamkti.wamk.entities.StatusCompra;
+import com.wamkti.wamk.entities.enums.StatusCompra;
 import com.wamkti.wamk.repositories.CompraRepository;
 import com.wamkti.wamk.services.CompraService;
 
@@ -75,7 +75,7 @@ public class CompraController {
 	public Compra adcionarCompra(@RequestBody CompraInputDTO compraInputDTO) {
 		Compra compra = new Compra();
 		compra.setTotal(0.0);
-		compra.setItems(0);
+		compra.setQuantidadeItems(0);
 		compra.setStatus(StatusCompra.COMPRANDO);
 		compraService.save(compra);
 		return compra;

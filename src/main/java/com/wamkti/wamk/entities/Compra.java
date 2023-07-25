@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
+import com.wamkti.wamk.entities.enums.StatusCompra;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ public class Compra implements Serializable{
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
-	private Integer items;
+	private Integer quantidadeItems;
 	private Double total;
 	private StatusCompra status;
 	private OffsetDateTime dataCompra;
@@ -34,11 +36,11 @@ public class Compra implements Serializable{
 	public Compra() {
 	}
 
-	public Compra(Long id, Cliente cliente, Integer items, Double total, StatusCompra status,
+	public Compra(Long id, Cliente cliente, Integer quantidadeItems, Double total, StatusCompra status,
 			OffsetDateTime dataCompra) {
 		this.id = id;
 		this.cliente = cliente;
-		this.items = items;
+		this.quantidadeItems = quantidadeItems;
 		this.total = total;
 		this.status = status;
 		this.dataCompra = dataCompra;
@@ -60,12 +62,12 @@ public class Compra implements Serializable{
 		this.cliente = cliente;
 	}
 
-	public Integer getItems() {
-		return items;
+	public Integer getQuantidadeItems() {
+		return quantidadeItems;
 	}
 
-	public void setItems(Integer items) {
-		this.items = items;
+	public void setQuantidadeItems(Integer quantidadeItems) {
+		this.quantidadeItems = quantidadeItems;
 	}
 
 	public Double getTotal() {

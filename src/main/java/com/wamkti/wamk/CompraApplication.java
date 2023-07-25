@@ -1,5 +1,6 @@
 package com.wamkti.wamk;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.entities.Compra;
+import com.wamkti.wamk.entities.ItemPedido;
+import com.wamkti.wamk.entities.Pedido;
 import com.wamkti.wamk.entities.Produto;
-import com.wamkti.wamk.entities.StatusCompra;
+import com.wamkti.wamk.entities.enums.StatusCompra;
 import com.wamkti.wamk.repositories.ClienteRepository;
 import com.wamkti.wamk.repositories.CompraRepository;
+import com.wamkti.wamk.repositories.ItemPedidoRepository;
+import com.wamkti.wamk.repositories.PedidoRepository;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -26,6 +31,12 @@ public class CompraApplication implements CommandLineRunner{
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CompraApplication.class, args);
@@ -57,6 +68,32 @@ public class CompraApplication implements CommandLineRunner{
 		cli3.getProdutos().addAll(Arrays.asList(p3));
 		
 		clienteRepository.saveAll(Arrays.asList(cli1, cli2, cli3));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2023 10:32"), cli1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2023 19:35"), cli2);
+		Pedido ped3 = new Pedido(null, sdf.parse("20/11/2023 15:20"), cli3);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1));
+		cli2.getPedidos().addAll(Arrays.asList(ped2));
+		cli3.getPedidos().addAll(Arrays.asList(ped3));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2, ped3));
+		
+		ItemPedido ip1 = new ItemPedido(cli1, p1, 1, 20.0);
+		ItemPedido ip2 = new ItemPedido(cli2, p2, 1, 2500.0);
+		ItemPedido ip3 = new ItemPedido(cli3, p3, 1, 850.0);
+		
+		cli1.getItens().addAll(Arrays.asList(ip1));
+		cli2.getItens().addAll(Arrays.asList(ip2));
+		cli3.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip2));
+		p3.getItens().addAll(Arrays.asList(ip3));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 
 }

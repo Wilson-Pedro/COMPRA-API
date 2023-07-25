@@ -25,11 +25,12 @@ import com.wamkti.wamk.acoes.Compre;
 import com.wamkti.wamk.dtos.ClienteDTO;
 import com.wamkti.wamk.dtos.min.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
-import com.wamkti.wamk.entities.StatusCompra;
+import com.wamkti.wamk.entities.enums.StatusCompra;
 import com.wamkti.wamk.repositories.ClienteRepository;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 import com.wamkti.wamk.services.ClienteService;
 import com.wamkti.wamk.services.CompraService;
+import com.wamkti.wamk.services.ItemPedidoService;
 import com.wamkti.wamk.services.ProdutoService;
 
 import jakarta.validation.Valid;
@@ -52,6 +53,9 @@ public class ClienteController {
 	
 	@Autowired
 	private CompraService compraService;
+	
+	@Autowired
+	private ItemPedidoService itemPedidoService;
 
 	@GetMapping
 	public List<ClienteMinDTO> listarDTO() {
@@ -112,7 +116,7 @@ public class ClienteController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
 		} else if (compra.getStatus().equals(StatusCompra.FINALIZADA)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sua compra já foi finalizada!");
-		} else if (compre.getQuantidade() >= produto.get().getEstoque()) {
+		} else if (compre.getQuantidade() > produto.get().getEstoque()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
 					"Estoque insuficiente."
 					+ "\nQuantidade demandada: " + compre.getQuantidade()
@@ -122,7 +126,8 @@ public class ClienteController {
 		compraService.atualziar(compra, items, subtotal);
 		clienteService.atualizarDinheiro(cliente.get(), subtotal);
 		produtoService.atualizarEstoque(compre.getQuantidade(), compre.getProdutoId());
-		produtoService.atulizarClienteIdDoProduto(clienteId, compre.getProdutoId());
+		produtoService.atulizarClienteIdDoPedido(clienteId, compre.getProdutoId());
+		itemPedidoService.criarOuAtulizarItemPedido(cliente.get(), produto.get(), compre.getQuantidade());
 		
 		return ResponseEntity.ok("Compra realizado com suceesso");
 	}

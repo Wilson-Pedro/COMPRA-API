@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.wamkti.wamk.entities.Compra;
-import com.wamkti.wamk.entities.StatusCompra;
+import com.wamkti.wamk.entities.enums.StatusCompra;
 
 public class CompraDTO extends RepresentationModel<CompraDTO> implements Serializable{
 	private static final long serialVersionUID = 1L;

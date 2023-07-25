@@ -12,7 +12,6 @@ public class ProdutoCompradoDTO extends RepresentationModel<ProdutoCompradoDTO> 
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private Long clienteId;
 	private String nomeProduto;
 	private Double preco;
 	private Integer quantidade;
@@ -50,14 +49,6 @@ public class ProdutoCompradoDTO extends RepresentationModel<ProdutoCompradoDTO> 
 		this.id = id;
 	}
 
-	public Long getClienteId() {
-		return clienteId;
-	}
-
-	public void setClienteId(Long clienteId) {
-		this.clienteId = clienteId;
-	}
-
 	public String getNomeProduto() {
 		return nomeProduto;
 	}
@@ -80,5 +71,9 @@ public class ProdutoCompradoDTO extends RepresentationModel<ProdutoCompradoDTO> 
 
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
+	}
+	
+	public Double getSubTotal() {
+		return preco * quantidade;
 	}
 }
