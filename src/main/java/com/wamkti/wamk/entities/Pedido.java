@@ -25,7 +25,11 @@ public class Pedido implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Date instante;
-
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
+	private Pagamento pagamento;
+	
+	//private Set<ItemPedido> itens = new HashSet<>();
 	
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
@@ -54,6 +58,14 @@ public class Pedido implements Serializable{
 
 	public void setInstante(Date instante) {
 		this.instante = instante;
+	}
+
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
 	}
 
 	public Cliente getCliente() {

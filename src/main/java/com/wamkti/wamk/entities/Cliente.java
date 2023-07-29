@@ -9,13 +9,11 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,8 +27,9 @@ public class Cliente implements Serializable{
 	private String nome;
 	private Double dinheiro;
 	
-	@OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
-	private Compra compra;
+//	@JsonIgnore
+//	@OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+//	private Compra compra;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
@@ -73,14 +72,6 @@ public class Cliente implements Serializable{
 
 	public void setDinheiro(Double dinheiro) {
 		this.dinheiro = dinheiro;
-	}
-
-	public Compra getCompra() {
-		return compra;
-	}
-
-	public void setCompra(Compra compra) {
-		this.compra = compra;
 	}
 
 	public List<Produto> getProdutos() {

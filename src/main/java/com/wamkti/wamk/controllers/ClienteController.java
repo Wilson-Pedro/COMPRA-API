@@ -3,7 +3,6 @@ package com.wamkti.wamk.controllers;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,8 @@ import com.wamkti.wamk.acoes.Compre;
 import com.wamkti.wamk.dtos.ClienteDTO;
 import com.wamkti.wamk.dtos.min.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
-import com.wamkti.wamk.entities.enums.StatusCompra;
 import com.wamkti.wamk.repositories.ClienteRepository;
-import com.wamkti.wamk.repositories.ProdutoRepository;
 import com.wamkti.wamk.services.ClienteService;
-import com.wamkti.wamk.services.CompraService;
 import com.wamkti.wamk.services.ItemPedidoService;
 import com.wamkti.wamk.services.ProdutoService;
 
@@ -44,15 +40,9 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	private ProdutoService produtoService;
-	
-	@Autowired
-	private ProdutoRepository produtoRepository;
-	
-	@Autowired
-	private CompraService compraService;
 	
 	@Autowired
 	private ItemPedidoService itemPedidoService;
@@ -106,48 +96,26 @@ public class ClienteController {
 	@PutMapping("/{clienteId}/compras")
 	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
 			@RequestBody @Valid Compre compre) {
-		var cliente = clienteRepository.findById(clienteId);
-		var produto = produtoRepository.findById(compre.getProdutoId());
-		var compra = compraService.findById(clienteId);
-		int items = compre.getQuantidade();
-		double subtotal = produto.get().getPreco() * items;
-		double dinheiroClinte = cliente.get().getDinheiro();
+		var cliente = clienteRepository.findById(clienteId).get();
+		var produto = produtoService.findById(compre.getProdutoId());
+		Integer quantidade = compre.getQuantidade();
+		double subtotal = produto.getPreco() * quantidade;
+		double dinheiroClinte = cliente.getDinheiro();
 		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
-		} else if (compra.getStatus().equals(StatusCompra.FINALIZADA)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sua compra já foi finalizada!");
-		} else if (compre.getQuantidade() > produto.get().getEstoque()) {
+		} else if (compre.getQuantidade() > produto.getEstoque()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
 					"Estoque insuficiente."
 					+ "\nQuantidade demandada: " + compre.getQuantidade()
-					+ "\nQuantidade em estoque: " + produto.get().getEstoque());
+					+ "\nQuantidade em estoque: " + produto.getEstoque());
 		}
-	
-		compraService.atualziar(compra, items, subtotal);
-		clienteService.atualizarDinheiro(cliente.get(), subtotal);
+		
+
+		clienteService.atualizarDinheiro(cliente, subtotal);
 		produtoService.atualizarEstoque(compre.getQuantidade(), compre.getProdutoId());
 		produtoService.atulizarClienteIdDoPedido(clienteId, compre.getProdutoId());
-		itemPedidoService.criarOuAtulizarItemPedido(cliente.get(), produto.get(), compre.getQuantidade());
+		itemPedidoService.criarOuAtulizarItemPedido(cliente, produto, compre.getQuantidade());
 		
-		return ResponseEntity.ok("Compra realizado com suceesso");
-	}
-	
-	@PutMapping("/{clienteId}/finalizacao")
-	public ResponseEntity<Object> finalizarCompra(@PathVariable Long clienteId){
-		var compra = compraService.findById(clienteId);
-		compra.setStatus(StatusCompra.FINALIZADA);
-		compra.setDataCompra(OffsetDateTime.now());
-		compraService.save(compra);
-		return ResponseEntity.ok("Compra finalizada!");
-		
-	}
-	
-	@PutMapping("/{clienteId}/continuacao")
-	public ResponseEntity<Object> continuarComprando(@PathVariable Long clienteId){
-		var compra = compraService.findById(clienteId);
-		compra.setStatus(StatusCompra.COMPRANDO);
-		compraService.save(compra);
-		return ResponseEntity.ok("Você pode continuar comprando!");
-		
+		return ResponseEntity.ok("Compra realizado com sucesso");
 	}
 }
