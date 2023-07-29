@@ -106,32 +106,6 @@ http://localhost:8080/produtos/1
 http://localhost:8080/produtos/1
 ```
 
-# Compra
-```
-http://localhost:8080/compras
-```
-```
-http://localhost:8080/compras/page
-```
-```
-http://localhost:8080/compras/1
-```
-```
-http://localhost:8080/compras
-```
-```
-http://localhost:8080/compras/1
-```
-```
-http://localhost:8080/clientes/1/finalizacao
-```
-```
-http://localhost:8080/clientes/1/continuar
-```
-```
-http://localhost:8080/compras/2
-```
-
 ## Autor
 
 - [@Wilson Pedro](https://github.com/Wilson-Pedro)
