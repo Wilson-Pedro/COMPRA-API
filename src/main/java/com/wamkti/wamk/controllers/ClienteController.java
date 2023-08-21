@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wamkti.wamk.acoes.Compre;
 import com.wamkti.wamk.dtos.ClienteDTO;
+import com.wamkti.wamk.dtos.CompreDTO;
 import com.wamkti.wamk.dtos.min.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.repositories.ClienteRepository;
@@ -93,28 +93,28 @@ public class ClienteController {
 		clienteService.deletePorId(clienteId);
 	}
 	
-	@PutMapping("/{clienteId}/compras")
-	public ResponseEntity<Object> clienteCompraProduto(@PathVariable Long clienteId, 
-			@RequestBody @Valid Compre compre) {
+	@PostMapping("/compras")
+	public ResponseEntity<Object> clienteCompraProduto(@RequestBody @Valid CompreDTO compreDTO) {
+		Long clienteId = compreDTO.getClienteId();
 		var cliente = clienteRepository.findById(clienteId).get();
-		var produto = produtoService.findById(compre.getProdutoId());
-		Integer quantidade = compre.getQuantidade();
+		var produto = produtoService.findById(compreDTO.getProdutoId());
+		Integer quantidade = compreDTO.getQuantidade();
 		double subtotal = produto.getPreco() * quantidade;
 		double dinheiroClinte = cliente.getDinheiro();
 		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
-		} else if (compre.getQuantidade() > produto.getEstoque()) {
+		} else if (compreDTO.getQuantidade() > produto.getEstoque()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
 					"Estoque insuficiente."
-					+ "\nQuantidade demandada: " + compre.getQuantidade()
+					+ "\nQuantidade demandada: " + compreDTO.getQuantidade()
 					+ "\nQuantidade em estoque: " + produto.getEstoque());
 		}
 		
 
 		clienteService.atualizarDinheiro(cliente, subtotal);
-		produtoService.atualizarEstoque(compre.getQuantidade(), compre.getProdutoId());
-		produtoService.atulizarClienteIdDoPedido(clienteId, compre.getProdutoId());
-		itemPedidoService.criarOuAtulizarItemPedido(cliente, produto, compre.getQuantidade());
+		produtoService.atualizarEstoque(compreDTO.getQuantidade(), compreDTO.getProdutoId());
+		produtoService.atulizarClienteIdDoPedido(clienteId, compreDTO.getProdutoId());
+		itemPedidoService.criarOuAtulizarItemPedido(cliente, produto, compreDTO.getQuantidade());
 		
 		return ResponseEntity.ok("Compra realizado com sucesso");
 	}

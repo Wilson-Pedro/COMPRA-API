@@ -1,11 +1,14 @@
-package com.wamkti.wamk.acoes;
+package com.wamkti.wamk.dtos;
 
 import java.io.Serializable;
 
 import jakarta.validation.constraints.NotNull;
 
-public class Compre implements Serializable{
+public class CompreDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
+	
+	@NotNull(message = "clienteId não pode ser nulo")
+	private Long clienteId;
 
 	@NotNull(message = "produtoId não pode ser nulo")
 	private Long produtoId;
@@ -13,7 +16,11 @@ public class Compre implements Serializable{
 	@NotNull(message = "quantidade produtoId não pode ser nulo")
 	private Integer quantidade;
 	
-	public Compre() {
+	public CompreDTO() {
+	}
+
+	public Long getClienteId() {
+		return clienteId;
 	}
 
 	public Long getProdutoId() {

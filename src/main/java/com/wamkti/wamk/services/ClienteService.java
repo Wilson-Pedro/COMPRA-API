@@ -25,11 +25,11 @@ public class ClienteService {
 		return list.stream().map(x -> new ClienteMinDTO(x)).toList();
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Page<ClienteMinDTO> page(Pageable pageable) {
-		Page<Cliente> list = clienteRepository.findAll(pageable);
-		return (Page<ClienteMinDTO>) list.stream().map(x -> new ClienteMinDTO(x)).toList();
-	}
+//	@SuppressWarnings("unchecked")
+//	public Page<ClienteMinDTO> page(Pageable pageable) {
+//		Page<Cliente> list = clienteRepository.findAll(pageable);
+//		return (Page<ClienteMinDTO>) list.stream().map(x -> new ClienteMinDTO(x)).toList();
+//	}
 	
 	public Cliente findById(Long clienteId) {
 		Cliente cliente = clienteRepository.findById(clienteId).get();
