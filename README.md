@@ -21,7 +21,7 @@ Para rodar o projeto localmente faça o download das seguintes ferramentas:
 - [Postman](https://www.postman.com/downloads/)
 - [Git](https://git-scm.com/downloads)
 
-Depois de ter instalado as ferramentas, crie uma pasta e de um nome a ela. Então abra o seu git bash nessa pasta. e digite o seguinte comando:
+Depois de ter instalado as ferramentas, crie uma pasta e dê um nome a ela. Então abra o seu git bash nessa pasta. e digite o seguinte comando:
 
 ![ABRIR-GIT-BASH](https://github.com/Wilson-Pedro/images/blob/main/git-bash/abrir-git-bash.png)
 
@@ -109,3 +109,6 @@ http://localhost:8080/produtos/1
 ## Autor
 
 - [@Wilson Pedro](https://github.com/Wilson-Pedro)
+
+## Linkedin
+- [Wilson Pedro](https://www.linkedin.com/in/wilson-pedro-976333226/)
