@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wamkti.wamk.dtos.ClienteDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,6 +49,11 @@ public class Cliente implements Serializable{
 		this.id = id;
 		this.nome = nome;
 		this.dinheiro = dinheiro;
+	}
+	
+	public Cliente(ClienteDTO clienteDTO) {
+		nome = clienteDTO.getNome();
+		dinheiro = clienteDTO.getDinheiro();
 	}
 
 	public Long getId() {

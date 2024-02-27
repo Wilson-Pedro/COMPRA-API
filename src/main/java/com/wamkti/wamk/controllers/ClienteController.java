@@ -6,8 +6,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,43 +46,43 @@ public class ClienteController {
 	private ItemPedidoService itemPedidoService;
 
 	@GetMapping
-	public List<ClienteMinDTO> listarDTO() {
-		List<ClienteMinDTO> list = clienteService.findAllMinDTO();
-		if(!list.isEmpty()) {
-			for(ClienteMinDTO cliente : list) {
-				Long id = cliente.getId();
-				cliente.add(linkTo(methodOn(ClienteController.class).buscarPorId(id)).withSelfRel());
+	public ResponseEntity<List<ClienteMinDTO>> listar() {
+		List<ClienteMinDTO> listDto = clienteService.findAll()
+				.stream()
+				.map(x -> new ClienteMinDTO(x)).toList();
+		if(!listDto.isEmpty()) 
+			for(ClienteMinDTO cliente : listDto) {
+				cliente.add(linkTo(methodOn(ClienteController.class).buscarPorId(cliente.getId())).withSelfRel());
 			}
-		}
-		return list;
+		return ResponseEntity.ok(listDto);
 	}
 	
-	@GetMapping("/page")
-	public ResponseEntity<Page<ClienteDTO>> paginar(Pageable pageable) {
-		Page<Cliente> pages = clienteRepository.findAll(pageable);
-		Page<ClienteDTO> pagesDto = pages.map(ClienteDTO::new);
-		return ResponseEntity.ok(pagesDto);
-	}
+//	@GetMapping("/page")
+//	public ResponseEntity<Page<ClienteDTO>> paginar(Pageable pageable) {
+//		Page<Cliente> pages = clienteRepository.findAll(pageable);
+//		Page<ClienteDTO> pagesDto = pages.map(ClienteDTO::new);
+//		return ResponseEntity.ok(pagesDto);
+//	}
 	
 	@GetMapping(value = "/{clienteId}")
-	public ClienteDTO buscarPorId(@PathVariable Long clienteId) {
-		ClienteDTO clienteDto = clienteService.findByIdDTO(clienteId);
-		clienteDto.add(linkTo(methodOn(ClienteController.class).listarDTO()).withSelfRel());
-		return clienteDto;
+	public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long clienteId) {
+		Cliente cliente = clienteService.findById(clienteId);
+		var clienteDto = new ClienteDTO(cliente);
+		clienteDto.add(linkTo(methodOn(ClienteController.class).listar()).withSelfRel());
+		return ResponseEntity.ok(clienteDto);
 	}
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public ClienteDTO adcionarCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
-		Cliente cliente = clienteService.copiarESalvar(clienteDTO);
-		return new ClienteDTO(cliente);
+	public ResponseEntity<ClienteDTO> adcionarCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
+		Cliente cliente = clienteService.salvar(new Cliente(clienteDTO));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new ClienteDTO(cliente));
 	}
 	
 	@PutMapping(value = "/{clienteId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizarCliente(@RequestBody @Valid ClienteDTO clienteDTO, 
+	public ResponseEntity<Void> atualizarCliente(@RequestBody @Valid ClienteDTO clienteDTO, 
 			@PathVariable Long clienteId) {
-		clienteService.atualizarComDTO(clienteDTO, clienteId);
+		clienteService.atualizar(new Cliente(clienteDTO), clienteId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping(value = "/{clienteId}")
@@ -95,26 +93,33 @@ public class ClienteController {
 	
 	@PostMapping("/compras")
 	public ResponseEntity<Object> clienteCompraProduto(@RequestBody @Valid CompreDTO compreDTO) {
-		Long clienteId = compreDTO.getClienteId();
-		var cliente = clienteRepository.findById(clienteId).get();
-		var produto = produtoService.findById(compreDTO.getProdutoId());
-		Integer quantidade = compreDTO.getQuantidade();
-		double subtotal = produto.getPreco() * quantidade;
-		double dinheiroClinte = cliente.getDinheiro();
-		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
-		} else if (compreDTO.getQuantidade() > produto.getEstoque()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-					"Estoque insuficiente."
-					+ "\nQuantidade demandada: " + compreDTO.getQuantidade()
-					+ "\nQuantidade em estoque: " + produto.getEstoque());
-		}
 		
-
-		clienteService.atualizarDinheiro(cliente, subtotal);
-		produtoService.atualizarEstoque(compreDTO.getQuantidade(), compreDTO.getProdutoId());
-		produtoService.atulizarClienteIdDoPedido(clienteId, compreDTO.getProdutoId());
-		itemPedidoService.criarOuAtulizarItemPedido(cliente, produto, compreDTO.getQuantidade());
+		produtoService.comprar(compreDTO);
+		
+//		Long clienteId = compreDTO.getClienteId();
+//		
+//		var cliente = clienteRepository.findById(clienteId).get();
+//		var produto = produtoService.findById(compreDTO.getProdutoId());
+//		
+//		Integer quantidade = compreDTO.getQuantidade();
+//		
+//		double subtotal = produto.getPreco() * quantidade;
+//		double dinheiroClinte = cliente.getDinheiro();
+//		
+//		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
+//		} else if (compreDTO.getQuantidade() > produto.getEstoque()) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+//					"Estoque insuficiente."
+//					+ "\nQuantidade demandada: " + compreDTO.getQuantidade()
+//					+ "\nQuantidade em estoque: " + produto.getEstoque());
+//		}
+//		
+//
+//		clienteService.atualizarDinheiro(cliente, subtotal);
+//		produtoService.atualizarEstoque(compreDTO.getQuantidade(), compreDTO.getProdutoId());
+//		produtoService.atulizarClienteIdDoPedido(clienteId, compreDTO.getProdutoId());
+//		itemPedidoService.criarOuAtulizarItemPedido(cliente, produto, compreDTO.getQuantidade());
 		
 		return ResponseEntity.ok("Compra realizado com sucesso");
 	}

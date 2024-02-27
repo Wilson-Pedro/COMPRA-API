@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wamkti.wamk.assembler.ProdutoAssembler;
@@ -45,33 +44,33 @@ public class ProdutoController {
 	
 
 	@GetMapping
-	public List<ProdutoDTO> listarDTO(){
-		List<ProdutoDTO> list = produtoService.findAllDTO();
-		if(!list.isEmpty()) {
-			for(ProdutoDTO produtoDTO : list) {
+	public ResponseEntity<List<ProdutoDTO>> listarDTO(){
+		List<ProdutoDTO> listDto = produtoService.findAll().stream()
+				.map(x -> new ProdutoDTO(x)).toList();
+		if(!listDto.isEmpty()) 
+			for(ProdutoDTO produtoDTO : listDto) {
 				Long id = produtoDTO.getId();
 				produtoDTO.add(linkTo(methodOn(ProdutoController.class).buscar(id)).withSelfRel());
 			}
-		}
-		return list;
+		return ResponseEntity.ok(listDto);
 	}
 	
 	@GetMapping("/page")
 	public Page<ProdutoDTO> page(Pageable pageable){
 		Page<Produto> pages = produtoRepository.findAll(pageable);
-		Page<ProdutoDTO> pagesDTO = pages.map(ProdutoDTO::new);
-		return pagesDTO;
+		return pages.map(ProdutoDTO::new);
 	}
 	
 	@GetMapping(value = "/{produtoId}")
-	public ProdutoDTO buscar(@PathVariable Long produtoId) {
-		ProdutoDTO produtoDTO = produtoService.findByIdDTO(produtoId);
+	public ResponseEntity<ProdutoDTO> buscar(@PathVariable Long produtoId) {
+		Produto produto = produtoService.findById(produtoId);
+		var produtoDTO = new ProdutoDTO(produto);
 		produtoDTO.add(linkTo(methodOn(ProdutoController.class).listarDTO()).withSelfRel());
-		return produtoDTO;
+		return ResponseEntity.ok(produtoDTO);
 	}
 	
 	@GetMapping(value = "/{clienteId}/clientes")
-	public List<ProdutoCompradoDTO> findByCliente(@PathVariable Long clienteId) {
+	public ResponseEntity<List<ProdutoCompradoDTO>> findByCliente(@PathVariable Long clienteId) {
 		List<ProdutoCompradoDTO> list = produtoService.findByCliente(clienteId);
 		if(!list.isEmpty()) {
 			for(ProdutoCompradoDTO obj : list) {
@@ -79,32 +78,25 @@ public class ProdutoController {
 				obj.add(linkTo(methodOn(ProdutoController.class).buscar(id)).withSelfRel());
 			}
 		}
-		return list;
+		return ResponseEntity.ok(list);
 	}
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> adcionarProduto(@Valid @RequestBody ProdutoInputDTO produtoInputDto) {
-		Produto obj = produtoAssembler.toEntity(produtoInputDto);
-		if(produtoService.existsByNomeProduto(obj.getNomeProduto())) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Produto " + obj.getNomeProduto() + " já existe.");
-		}
-		obj.setId(null);
-		produtoService.save(obj);
-		var inputDto = new ProdutoInputDTO(obj);
-		return ResponseEntity.ok().body(inputDto);
+	public ResponseEntity<ProdutoInputDTO> adcionarProduto(@Valid @RequestBody ProdutoInputDTO produtoInputDto) {
+		Produto obj = produtoService.save(produtoAssembler.toEntity(produtoInputDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new ProdutoInputDTO(obj));
 	}
 	
 	@PutMapping(value = "/{produtoId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizarProduto(@Valid @RequestBody ProdutoDTO produtoDTO, 
+	public ResponseEntity<Void> atualizarProduto(@Valid @RequestBody ProdutoDTO produtoDTO, 
 			@PathVariable Long produtoId) {
 		produtoService.atualizar(produtoDTO, produtoId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping(value = "/{produtoId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletarProduto(@PathVariable Long produtoId) {
+	public ResponseEntity<Void> deletarProduto(@PathVariable Long produtoId) {
 		produtoService.deletePorId(produtoId);
+		return ResponseEntity.noContent().build();
 	}
 }
