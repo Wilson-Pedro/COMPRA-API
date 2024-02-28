@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wamkti.wamk.dtos.ClienteDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.exceptions.EntityNotFoundException;
 import com.wamkti.wamk.repositories.ClienteRepository;
@@ -21,19 +20,9 @@ public class ClienteService {
 		return clienteRepository.findAll();
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	public Page<ClienteMinDTO> page(Pageable pageable) {
-//		Page<Cliente> list = clienteRepository.findAll(pageable);
-//		return (Page<ClienteMinDTO>) list.stream().map(x -> new ClienteMinDTO(x)).toList();
-//	}
-	
 	public Cliente findById(Long clienteId) {
 		return clienteRepository.findById(clienteId)
 				.orElseThrow(() -> new EntityNotFoundException());
-	}
-
-	public void save(Cliente cliente) {
-		clienteRepository.save(cliente);
 	}
 
 	public void deletePorId(Long clienteId) {

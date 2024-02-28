@@ -22,9 +22,7 @@ import com.wamkti.wamk.dtos.ClienteDTO;
 import com.wamkti.wamk.dtos.CompreDTO;
 import com.wamkti.wamk.dtos.min.ClienteMinDTO;
 import com.wamkti.wamk.entities.Cliente;
-import com.wamkti.wamk.repositories.ClienteRepository;
 import com.wamkti.wamk.services.ClienteService;
-import com.wamkti.wamk.services.ItemPedidoService;
 import com.wamkti.wamk.services.ProdutoService;
 
 import jakarta.validation.Valid;
@@ -35,15 +33,9 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteService clienteService;
-	
-	@Autowired
-	private ClienteRepository clienteRepository;
 
 	@Autowired
 	private ProdutoService produtoService;
-	
-	@Autowired
-	private ItemPedidoService itemPedidoService;
 
 	@GetMapping
 	public ResponseEntity<List<ClienteMinDTO>> listar() {
@@ -56,13 +48,6 @@ public class ClienteController {
 			}
 		return ResponseEntity.ok(listDto);
 	}
-	
-//	@GetMapping("/page")
-//	public ResponseEntity<Page<ClienteDTO>> paginar(Pageable pageable) {
-//		Page<Cliente> pages = clienteRepository.findAll(pageable);
-//		Page<ClienteDTO> pagesDto = pages.map(ClienteDTO::new);
-//		return ResponseEntity.ok(pagesDto);
-//	}
 	
 	@GetMapping(value = "/{clienteId}")
 	public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long clienteId) {
@@ -93,34 +78,7 @@ public class ClienteController {
 	
 	@PostMapping("/compras")
 	public ResponseEntity<Object> clienteCompraProduto(@RequestBody @Valid CompreDTO compreDTO) {
-		
 		produtoService.comprar(compreDTO);
-		
-//		Long clienteId = compreDTO.getClienteId();
-//		
-//		var cliente = clienteRepository.findById(clienteId).get();
-//		var produto = produtoService.findById(compreDTO.getProdutoId());
-//		
-//		Integer quantidade = compreDTO.getQuantidade();
-//		
-//		double subtotal = produto.getPreco() * quantidade;
-//		double dinheiroClinte = cliente.getDinheiro();
-//		
-//		if(dinheiroClinte == 0 || subtotal > dinheiroClinte) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não possui saldo suficiente para fazer esta compra");
-//		} else if (compreDTO.getQuantidade() > produto.getEstoque()) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//					"Estoque insuficiente."
-//					+ "\nQuantidade demandada: " + compreDTO.getQuantidade()
-//					+ "\nQuantidade em estoque: " + produto.getEstoque());
-//		}
-//		
-//
-//		clienteService.atualizarDinheiro(cliente, subtotal);
-//		produtoService.atualizarEstoque(compreDTO.getQuantidade(), compreDTO.getProdutoId());
-//		produtoService.atulizarClienteIdDoPedido(clienteId, compreDTO.getProdutoId());
-//		itemPedidoService.criarOuAtulizarItemPedido(cliente, produto, compreDTO.getQuantidade());
-		
 		return ResponseEntity.ok("Compra realizado com sucesso");
 	}
 }
