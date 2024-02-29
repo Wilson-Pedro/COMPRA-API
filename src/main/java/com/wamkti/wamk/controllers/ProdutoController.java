@@ -90,7 +90,7 @@ public class ProdutoController {
 	@PutMapping(value = "/{produtoId}")
 	public ResponseEntity<Void> atualizarProduto(@Valid @RequestBody ProdutoDTO produtoDTO, 
 			@PathVariable Long produtoId) {
-		produtoService.atualizar(produtoDTO, produtoId);
+		produtoService.atualizar(produtoAssembler.toEntity(produtoDTO), produtoId);
 		return ResponseEntity.noContent().build();
 	}
 	

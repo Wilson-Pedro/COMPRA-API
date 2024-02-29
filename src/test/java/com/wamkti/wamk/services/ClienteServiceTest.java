@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.repositories.ClienteRepository;
+import com.wamkti.wamk.repositories.ProdutoRepository;
 
 @SpringBootTest
 class ClienteServiceTest {
@@ -23,10 +24,14 @@ class ClienteServiceTest {
 	@Autowired
 	ClienteRepository clienteRepository;
 	
+	@Autowired
+	ProdutoRepository produtoRepository;
+	
 	Cliente cliente = new Cliente();
 	
 	@BeforeEach
 	void setUp() {
+		produtoRepository.deleteAll();
 		clienteRepository.deleteAll();
 		
 		cliente = new Cliente(null, "Wilson", 1000.0);
