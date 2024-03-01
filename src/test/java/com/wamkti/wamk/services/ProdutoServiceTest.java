@@ -10,7 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.wamkti.wamk.dtos.CompreDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.repositories.ClienteRepository;
@@ -95,10 +97,41 @@ class ProdutoServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Should Delete The Product Successfully")
-	void deleteByIdCase01() {
+	@DisplayName("Should Updtae The Stock Seccessfully")
+	void updateStockCase01() {
 		clienteRepository.save(cliente);
 		produtoRepository.save(produto);
+	
+		Long id = produtoRepository.findAll().get(0).getId();
+	
+		Produto produto = produtoService.atualizarEstoque(5, id);
+	
+		assertEquals(5, produto.getEstoque());
+	}
+
+	@Test
+	@Transactional
+	@DisplayName("Should Buy The Product Successfullybu")
+	void buyCase01() {
+		clienteRepository.save(cliente);
+		produtoRepository.save(produto);
+	
+		Long clientId = clienteRepository.findAll().get(0).getId();
+		Long productId = produtoRepository.findAll().get(0).getId();
+	
+		CompreDTO compreDto = new CompreDTO(clientId, productId, 5);
+	
+		produtoService.comprar(compreDto);
+	
+		Produto produto = produtoService.findById(productId);
+	
+		assertEquals(5, produto.getEstoque());
+	}
+	
+	@Test
+	@DisplayName("Should Delete The Product Successfully")
+	void deleteCase01() {
+		produtoRepository.save(new Produto(null, "Relógio", 20.0, null, 10));
 		
 		assertEquals(1, produtoRepository.count());
 		

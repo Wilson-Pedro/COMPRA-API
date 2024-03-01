@@ -75,11 +75,11 @@ public class ProdutoService {
 	}
 
 	public Produto atualizarEstoque(Integer quantidadeCompra, Long produtoId) {
-		var produto = produtoRepository.findById(produtoId);
-		Integer estoque = produto.get().getEstoque();
-		produto.get().setEstoque(estoque - quantidadeCompra);
-		produto.get().setId(produtoId);
-		return produtoRepository.save(produto.get());
+		var produto = produtoRepository.findById(produtoId).get();
+		Integer estoque = produto.getEstoque();
+		produto.setEstoque(estoque - quantidadeCompra);
+		produto.setId(produtoId);
+		return produtoRepository.save(produto);
 	}
 
 	@Transactional

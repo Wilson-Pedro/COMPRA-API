@@ -19,6 +19,14 @@ public class CompreDTO implements Serializable{
 	public CompreDTO() {
 	}
 
+	public CompreDTO(Long clienteId, Long produtoId, Integer quantidade) {
+		this.clienteId = clienteId;
+		this.produtoId = produtoId;
+		this.quantidade = quantidade;
+	}
+
+
+
 	public Long getClienteId() {
 		return clienteId;
 	}
