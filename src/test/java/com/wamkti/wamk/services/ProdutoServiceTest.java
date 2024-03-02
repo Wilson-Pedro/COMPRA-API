@@ -13,9 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wamkti.wamk.dtos.CompreDTO;
+import com.wamkti.wamk.dtos.ProdutoCompradoDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.repositories.ClienteRepository;
+import com.wamkti.wamk.repositories.ItemPedidoRepository;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 
 @SpringBootTest
@@ -30,12 +32,15 @@ class ProdutoServiceTest {
 	@Autowired
 	ClienteRepository clienteRepository;
 	
+	@Autowired
+	ItemPedidoRepository itemPedidoRepository;
+	
 	Cliente cliente = new Cliente();
 	
 	Produto produto = new Produto();
 
 	@BeforeEach
-	void test() {
+	void setUp() {
 		produtoRepository.deleteAll();
 		clienteRepository.deleteAll();
 		
@@ -97,9 +102,29 @@ class ProdutoServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	@DisplayName("Should Updtae The Stock Seccessfully")
 	void updateStockCase01() {
 		clienteRepository.save(cliente);
+		produtoRepository.save(produto);
+		produtoRepository.save(new Produto(null, "Pencil", 2.0, null, 100));
+	
+		Long clientId = clienteRepository.findAll().get(0).getId();
+		Long productId = produtoRepository.findAll().get(0).getId();
+	
+		produtoService.comprar(new CompreDTO(clientId, productId, 5));
+		
+		List<ProdutoCompradoDTO> list = produtoService.findByCliente(clientId);
+	
+		assertEquals(2, produtoRepository.count());
+		assertEquals(1, list.size());
+	}
+	
+	@Test
+	@DisplayName("Should Fetch a List Of Product From the ClientId Seccessfully")
+	void findByClienteCase01() {
+		clienteRepository.save(cliente);
+		produtoRepository.save(produto);
 		produtoRepository.save(produto);
 	
 		Long id = produtoRepository.findAll().get(0).getId();
@@ -111,7 +136,7 @@ class ProdutoServiceTest {
 
 	@Test
 	@Transactional
-	@DisplayName("Should Buy The Product Successfullybu")
+	@DisplayName("Should Buy The Product Successfully")
 	void buyCase01() {
 		clienteRepository.save(cliente);
 		produtoRepository.save(produto);
@@ -123,9 +148,11 @@ class ProdutoServiceTest {
 	
 		produtoService.comprar(compreDto);
 	
-		Produto produto = produtoService.findById(productId);
-	
-		assertEquals(5, produto.getEstoque());
+		Cliente client = clienteRepository.findById(clientId).get();
+		Produto product = produtoService.findById(productId);
+		
+		assertEquals(4900.0, client.getDinheiro());
+		assertEquals(5, product.getEstoque());
 	}
 	
 	@Test
