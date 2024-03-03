@@ -13,8 +13,6 @@ import jakarta.validation.constraints.NotNull;
 public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;
-	
 	@NotBlank(message = "nome é obrigatório")
 	private String nome;
 	
@@ -28,18 +26,9 @@ public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Seria
 		BeanUtils.copyProperties(cliente, this);
 	}
 	
-	public ClienteDTO(Long id, String nome, Double dinheiro) {
-		this.id = id;
+	public ClienteDTO(String nome, Double dinheiro) {
 		this.nome = nome;
 		this.dinheiro = dinheiro;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getNome() {

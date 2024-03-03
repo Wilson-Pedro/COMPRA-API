@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wamkti.wamk.dtos.ClienteDTO;
@@ -58,7 +57,7 @@ public class ClienteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ClienteDTO> adcionarCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
+	public ResponseEntity<ClienteDTO> salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
 		Cliente cliente = clienteService.salvar(new Cliente(clienteDTO));
 		return ResponseEntity.status(HttpStatus.CREATED).body(new ClienteDTO(cliente));
 	}
@@ -71,9 +70,9 @@ public class ClienteController {
 	}
 	
 	@DeleteMapping(value = "/{clienteId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletarCliente(@PathVariable Long clienteId) {
+	public ResponseEntity<Void> deletarCliente(@PathVariable Long clienteId) {
 		clienteService.deletePorId(clienteId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PostMapping("/compras")
