@@ -154,4 +154,17 @@ class ProdutoControllerTest {
 		
 		assertEquals(0, produtoRepository.count());
 	}
+	
+	@Test
+	@DisplayName("Should Fetch A List Of Products From The Client Id Successfully")
+	void findByClienteIdCase01() throws Exception {
+		clienteRepository.save(cliente);
+		produtoRepository.save(produto);
+
+		Long id = clienteRepository.findAll().get(0).getId();
+		
+		mockMvc.perform(get("/produtos/{clienteId}/clientes", id))
+			.andExpect(status().isOk());
+
+	}
 }

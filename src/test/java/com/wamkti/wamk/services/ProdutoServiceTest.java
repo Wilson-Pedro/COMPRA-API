@@ -41,6 +41,7 @@ class ProdutoServiceTest {
 
 	@BeforeEach
 	void setUp() {
+		itemPedidoRepository.deleteAll();
 		produtoRepository.deleteAll();
 		clienteRepository.deleteAll();
 		
@@ -107,6 +108,20 @@ class ProdutoServiceTest {
 	void updateStockCase01() {
 		clienteRepository.save(cliente);
 		produtoRepository.save(produto);
+	
+		Long id = produtoRepository.findAll().get(0).getId();
+	
+		Produto produto = produtoService.atualizarEstoque(5, id);
+	
+		assertEquals(5, produto.getEstoque());
+
+	}
+	
+	@Test
+	@DisplayName("Should Fetch a List Of Product From the ClientId Seccessfully")
+	void findByClienteCase01() {
+		clienteRepository.save(cliente);
+		produtoRepository.save(produto);
 		produtoRepository.save(new Produto(null, "Pencil", 2.0, null, 100));
 	
 		Long clientId = clienteRepository.findAll().get(0).getId();
@@ -118,20 +133,6 @@ class ProdutoServiceTest {
 	
 		assertEquals(2, produtoRepository.count());
 		assertEquals(1, list.size());
-	}
-	
-	@Test
-	@DisplayName("Should Fetch a List Of Product From the ClientId Seccessfully")
-	void findByClienteCase01() {
-		clienteRepository.save(cliente);
-		produtoRepository.save(produto);
-		produtoRepository.save(produto);
-	
-		Long id = produtoRepository.findAll().get(0).getId();
-	
-		Produto produto = produtoService.atualizarEstoque(5, id);
-	
-		assertEquals(5, produto.getEstoque());
 	}
 
 	@Test

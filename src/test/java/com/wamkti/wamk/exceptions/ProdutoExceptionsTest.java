@@ -11,6 +11,7 @@ import com.wamkti.wamk.dtos.CompreDTO;
 import com.wamkti.wamk.entities.Cliente;
 import com.wamkti.wamk.entities.Produto;
 import com.wamkti.wamk.repositories.ClienteRepository;
+import com.wamkti.wamk.repositories.ItemPedidoRepository;
 import com.wamkti.wamk.repositories.ProdutoRepository;
 import com.wamkti.wamk.services.ProdutoService;
 
@@ -26,12 +27,16 @@ class ProdutoExceptionsTest {
 	@Autowired
 	ClienteRepository clienteRepository;
 	
+	@Autowired
+	ItemPedidoRepository itemPedidoRepository;
+	
 	Cliente cliente = new Cliente();
 	
 	Produto produto = new Produto();
 	
 	@BeforeEach
 	void test() {
+		itemPedidoRepository.deleteAll();
 		produtoRepository.deleteAll();
 		clienteRepository.deleteAll();
 		
